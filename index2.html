@@ -1,0 +1,1071 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+    <title>Rand Lottery</title>
+    <meta name="title" content="Rand Lottery | Seize Your Chance">
+    <meta name="description" content="Rand Lottery Limited is a premier provider of lottery services committed to offering fair, transparent, and exciting gaming experiences. We have become a trusted name in the industry by delivering innovative lottery solutions that cater to a diverse audience.">
+
+    <!-- SEO Keywords -->
+    <meta name="keywords" content="lottery Ghana, online lottery, win big, play smart, secure lottery, Ghana lottery">
+    <meta name="author" content="NiiAbe">
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="#">
+    <meta property="og:title" content="Rand Lottery | Seize Your Chance">
+    <meta property="og:description" content="Rand Lottery Limited is a premier provider of lottery services committed to offering fair, transparent, and exciting gaming experiences. We have become a trusted name in the industry by delivering innovative lottery solutions that cater to a diverse audience.">
+    <meta property="og:image" content="https://placehold.co/1200x630/007bff/ffffff?text=Rand+Lottery">
+
+    <!-- Favicon-->
+    <link rel="icon" type="image/x-icon" href="https://placehold.co/32x32/007bff/ffffff?text=RL" />
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Bootstrap core CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" crossorigin="anonymous">
+
+    <!-- Bootstrap icons-->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css" rel="stylesheet" type="text/css" />
+    
+    <!-- Google fonts-->
+    <link href="https://fonts.googleapis.com/css?family=Lato:300,400,700,300italic,400italic,700italic" rel="stylesheet" type="text/css" />
+    <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+
+    <style>
+        /* Custom CSS styles that were likely in resources/css/index.css */
+        .glass-effect {
+            background: rgba(255, 255, 255, 0.2);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+        }
+        .floating-animation {
+            animation: float 3s ease-in-out infinite;
+        }
+        @keyframes float {
+            0% { transform: translateY(0px); }
+            50% { transform: translateY(-10px); }
+            100% { transform: translateY(0px); }
+        }
+        .glow-text {
+            text-shadow: 0 0 8px rgba(255, 255, 255, 0.7);
+        }
+        .text-shimmer {
+            background: linear-gradient(90deg, #ffeb3b, #fff, #ffeb3b);
+            background-size: 200% 100%;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            animation: shimmer 3s infinite linear;
+        }
+        @keyframes shimmer {
+            0% { background-position: -200% 0; }
+            100% { background-position: 200% 0; }
+        }
+        .elegant-border-inner {
+            border: 2px solid transparent;
+            border-image: linear-gradient(to right, #a78bfa, #818cf8, #6366f1) 1;
+            padding: 1.5rem; /* Adjust as needed */
+            border-radius: 1rem; /* Adjust as needed */
+        }
+        .gradient-border-inner {
+            border: 2px solid transparent;
+            border-image: linear-gradient(to right, #fcd34d, #fbbf24, #f59e0b) 1;
+            padding: 1.5rem; /* Adjust as needed */
+            border-radius: 1rem; /* Adjust as needed */
+        }
+
+        /* Lotto Number Selector Specific Styles */
+        .number-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(50px, 1fr)); /* Responsive grid */
+            gap: 10px;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #ffffff;
+            border-radius: 10px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+        }
+        .number-button {
+            width: 50px;
+            height: 50px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+            font-weight: bold;
+            border-radius: 50%; /* Circular buttons */
+            border: 2px solid #007bff; /* Primary blue border */
+            background-color: #ffffff;
+            color: #007bff;
+            cursor: pointer;
+            transition: all 0.2s ease-in-out;
+            user-select: none; /* Prevent text selection */
+        }
+        .number-button:hover {
+            background-color: #e9ecef;
+            transform: scale(1.05);
+        }
+        .number-button.selected {
+            background-color: #007bff; /* Primary blue when selected */
+            color: #ffffff;
+            border-color: #0056b3;
+            transform: scale(1.1);
+            box-shadow: 0 0 10px rgba(0, 123, 255, 0.5);
+        }
+        .selected-numbers-display {
+            min-height: 60px;
+            border: 1px dashed #ced4da;
+            border-radius: 8px;
+            padding: 15px;
+            margin-bottom: 20px;
+            background-color: #e9ecef;
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+        .selected-number-badge {
+            background-color: #28a745; /* Success green */
+            color: white;
+            padding: 8px 12px;
+            border-radius: 20px;
+            font-weight: bold;
+            font-size: 1.1rem;
+        }
+        .action-buttons {
+            margin-top: 20px;
+            text-align: center;
+        }
+        /* Custom modal styles for alerts */
+        .custom-modal {
+            display: none; /* Hidden by default */
+            position: fixed; /* Stay in place */
+            z-index: 1050; /* Sit on top */
+            left: 0;
+            top: 0;
+            width: 100%; /* Full width */
+            height: 100%; /* Full height */
+            overflow: auto; /* Enable scroll if needed */
+            background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+            justify-content: center;
+            align-items: center;
+        }
+        .custom-modal-content {
+            background-color: #fefefe;
+            margin: auto;
+            padding: 20px;
+            border: 1px solid #888;
+            width: 80%;
+            max-width: 400px;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+            text-align: center;
+        }
+        .custom-modal-header {
+            padding: 10px 0;
+            border-bottom: 1px solid #e9ecef;
+            margin-bottom: 15px;
+        }
+        .custom-modal-header h5 {
+            margin-bottom: 0;
+            font-size: 1.25rem;
+            font-weight: bold;
+        }
+        .custom-modal-body {
+            padding: 10px 0;
+            font-size: 1rem;
+            color: #333;
+        }
+        .custom-modal-footer {
+            padding: 10px 0;
+            border-top: 1px solid #e9ecef;
+            margin-top: 15px;
+            display: flex;
+            justify-content: center;
+        }
+        .close-modal-btn {
+            background-color: #007bff;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.2s;
+        }
+        .close-modal-btn:hover {
+            background-color: #0056b3;
+        }
+
+        /* Specific styles for game day buttons and network options */
+        .game-btn {
+            position: relative;
+            overflow: hidden;
+            background-size: cover;
+            background-position: center;
+        }
+        .game-btn img {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            border-radius: 50%;
+        }
+        .game-btn span {
+            position: relative;
+            z-index: 1;
+            color: white; /* Default text color */
+            text-shadow: 0 0 5px rgba(0,0,0,0.5); /* Add text shadow for readability */
+        }
+        .game-btn[data-game="monday"] span { color: #fff; } /* Example: specific color for Monday */
+        .game-btn[data-game="tuesday"] span { color: #fff; }
+        .game-btn[data-game="wednesday"] span { color: #fff; }
+        .game-btn[data-game="thursday"] span { color: #fff; }
+        .game-btn[data-game="friday"] span { color: #fff; }
+        .game-btn[data-game="saturday"] span { color: #fff; }
+        .game-btn[data-game="sunday"] span { color: #fff; }
+
+        .network-option input:checked + div {
+            border: 2px solid #007bff; /* Highlight selected network */
+            box-shadow: 0 0 10px rgba(0, 123, 255, 0.5);
+        }
+        .network-option div img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+            border-radius: 50%;
+        }
+        .network-option div {
+            border: 2px solid transparent; /* Default border for network options */
+        }
+        .bet-type-btn.selected {
+            border-color: #4f46e5; /* Indigo-600 for selected bet type */
+            background-color: #e0e7ff; /* Indigo-100 */
+            box-shadow: 0 0 10px rgba(79, 70, 229, 0.3);
+        }
+    </style>
+</head>
+<body class="bg-gray-50">
+    <!-- Hero Section with Navbar -->
+    <section class="text-white min-h-screen relative overflow-hidden bg-gradient-to-br from-purple-900 via-blue-900 to-indigo-900">
+        <!-- Background Overlay (replaces video) -->
+        <div class="absolute inset-0 bg-black bg-opacity-40"></div>
+        
+        <!-- Header -->
+        <header class="absolute top-0 left-0 right-0 z-50 bg-transparent relative">
+            <div class="container mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="flex items-center justify-between py-4 sm:py-6">
+                    <!-- Burger Menu and Brand -->
+                    <div class="flex items-center space-x-2 sm:space-x-3">
+                        <button id="burgerMenu" class="p-2 text-white hover:text-blue-200 transition duration-300">
+                            <svg class="w-5 h-5 sm:w-6 sm:h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
+                            </svg>
+                        </button>
+                        <div class="flex items-center space-x-2 sm:space-x-3">
+                            <div class="w-10 h-10 sm:w-12 sm:h-12 glass-effect rounded-xl flex items-center justify-center floating-animation">
+                                <img src="https://placehold.co/48x48/007bff/ffffff?text=RL" alt="Rand Lottery Logo" class="text-2xl sm:text-3xl"/>
+                            </div>
+                            <div>
+                                <span class="text-lg sm:text-4xl font-bold text-white glow-text">Rand</span>
+                                <div class="text-3xl sm:text-lg text-yellow-300 font-medium">LOTTERY</div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Auth Buttons -->
+                    <div class="flex items-center space-x-2 sm:space-x-3">
+                        <button id="navCalculator" class="bg-white  text-black px-2 py-2 sm:px-3 sm:py-2 rounded-lg font-medium hover:from-green-600 hover:to-emerald-600 transition duration-300 text-sm flex items-center">
+                            <span class="text-lg mr-1">
+                                <img src="https://placehold.co/20x20/008000/ffffff?text=₵" alt="cedi" class="h-5 w-5 object-fit: contain;" title="Calculate Win">
+                            </span>
+                            <span class="hidden sm:inline">Calculator</span>
+                        </button>
+                        <button class="hidden sm:block bg-white bg-opacity-20 backdrop-blur-sm text-white px-3 py-2 sm:px-4 sm:py-2 rounded-lg font-medium hover:bg-opacity-30 transition duration-300 text-sm">Login</button>
+                        <button class=" bg-white text-purple-600 px-3 py-2 sm:px-4 sm:py-2 rounded-lg font-medium hover:bg-gray-100 transition duration-300 text-sm">Sign Up</button>
+                    </div>
+                </div>
+            </div>
+        </header>
+
+        <!-- Hero Content -->
+        <div class="flex items-center justify-center min-h-screen px-4 sm:px-6 lg:px-8 relative z-10">
+            <div class="container mx-auto text-center">
+
+                <h1 class="text-4xl sm:text-6xl md:text-7xl lg:text-8xl font-extrabold mb-6 sm:mb-8 relative" >
+                    <span class="text-shimmer  glow-text" style="font-family: 'DM Serif Display', serif;" >Win Big</span>
+                    <span class="text-white glow-text block">Play Smart</span>
+                    <div class="absolute -inset-4 bg-gradient-to-r from-yellow-400/20 via-purple-500/20 to-blue-500/20 blur-3xl -z-10"></div>
+                </h1>
+                <p class="text-lg sm:text-xl md:text-2xl mb-8 sm:mb-12 max-w-3xl mx-auto text-white/90 font-light px-4">Rand Lottery Limited is a premier provider of lottery services committed to offering fair, transparent, and exciting gaming experiences. We have become a trusted name in the industry by delivering innovative lottery solutions that cater to a diverse audience. </p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Aside Navigation Panel -->
+    <aside id="asideNav" class="fixed top-0 left-0 h-full w-72 sm:w-80 bg-white shadow-2xl transform -translate-x-full transition-transform duration-300 ease-in-out z-50">
+        <!-- Header -->
+        <div class="bg-gradient-to-r from-purple-600 to-blue-600 p-4 sm:p-6 text-white">
+            <div class="flex items-center justify-between">
+                <div class="flex items-center space-x-2 sm:space-x-3">
+                    <div class="w-8 h-8 sm:w-10 sm:h-10 glass-effect rounded-xl flex items-center justify-center">
+                        <span class="text-lg sm:text-2xl">🍀</span>
+                    </div>
+                    <div>
+                        <span class="text-lg sm:text-xl font-bold">LuckyWin</span>
+                        <div class="text-xs text-yellow-300 font-medium">LOTTO</div>
+                    </div>
+                </div>
+                <button id="closeNav" class="p-2 hover:bg-white hover:bg-opacity-20 rounded-lg transition duration-300">
+                    <svg class="w-5 h-5 sm:w-6 sm:h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                    </svg>
+                </button>
+            </div>
+        </div>
+        
+        <!-- Navigation Content -->
+        <div class="p-4 sm:p-6">
+            <nav class="space-y-2 sm:space-y-4">
+                <a href="#" class="flex items-center space-x-3 sm:space-x-4 text-gray-800 hover:text-purple-600 font-medium transition duration-300 py-3 sm:py-4 px-3 sm:px-4 rounded-xl hover:bg-gradient-to-r hover:from-purple-50 hover:to-blue-50 group">
+                    <span class="text-xl sm:text-2xl group-hover:scale-110 transition-transform">🏠</span>
+                    <span class="text-base sm:text-lg">Home</span>
+                </a>
+                <a href="#" class="flex items-center space-x-3 sm:space-x-4 text-gray-800 hover:text-purple-600 font-medium transition duration-300 py-3 sm:py-4 px-3 sm:px-4 rounded-xl hover:bg-gradient-to-r hover:from-purple-50 hover:to-blue-50 group">
+                    <span class="text-xl sm:text-2xl group-hover:scale-110 transition-transform">🎰</span>
+                    <span class="text-base sm:text-lg">Play Games</span>
+                </a>
+                <a href="#" class="flex items-center space-x-3 sm:space-x-4 text-gray-800 hover:text-purple-600 font-medium transition duration-300 py-3 sm:py-4 px-3 sm:px-4 rounded-xl hover:bg-gradient-to-r hover:from-purple-50 hover:to-blue-50 group">
+                    <span class="text-xl sm:text-2xl group-hover:scale-110 transition-transform">🏆</span>
+                    <span class="text-base sm:text-lg">Results</span>
+                </a>  
+                <a id="navCalculator" href="#" class="flex items-center space-x-3 sm:space-x-4 text-gray-800 hover:text-purple-600 font-medium transition duration-300 py-3 sm:py-4 px-3 sm:px-4 rounded-xl hover:bg-gradient-to-r hover:from-purple-50 hover:to-blue-50 group">
+                    <span class="text-lg mr-1">
+                        <img src="https://placehold.co/40x20/008000/ffffff?text=₵" alt="cedi" class="h-10 w-5 object-fit: contain;" title="Calculate Win">
+                    </span>
+                    <span class="sm:inline">Calculator</span>
+                </a>                
+            </nav>
+            
+            <!-- Auth Buttons in Aside -->
+            <div class="mt-6 sm:mt-8 space-y-3">
+                <button class="w-full bg-purple-600 text-white py-3 px-4 rounded-lg font-medium hover:bg-purple-700 transition duration-300 text-sm sm:text-base">Sign Up</button>
+                <button class="w-full border-2 border-purple-600 text-purple-600 py-3 px-4 rounded-lg font-medium hover:bg-purple-50 transition duration-300 text-sm sm:text-base">Login</button>
+            </div>
+        </div>
+        
+        <!-- Footer in Aside -->
+        <div class="absolute bottom-0 left-0 right-0 p-4 sm:p-6 border-t border-gray-200">
+            <div class="text-center text-gray-500 text-xs sm:text-sm">
+                <p>📍 Accra, Ghana</p>
+                <p>📞 +233 XX XXX XXXX</p>
+            </div>
+        </div>
+    </aside>
+
+    <!-- Overlay -->
+    <div id="overlay" class="fixed inset-0 bg-black bg-opacity-50 z-40 opacity-0 pointer-events-none transition-opacity duration-300"></div>
+
+    <!-- Winnings Calculator Overlay -->
+    <div id="winningsCalculator" class="fixed top-4 right-4 w-80 bg-white rounded-2xl shadow-2xl border border-gray-200 p-6 transform translate-x-full transition-transform duration-300 ease-in-out z-50 hidden">
+        <div class="flex items-center justify-between mb-4">
+            <h3 class="text-lg font-bold text-gray-800 flex items-center">
+                <span class="text-2xl mr-2">💰</span>
+                Potential Winnings
+            </h3>
+            <button id="closeCalculator" class="text-gray-400 hover:text-gray-600 transition duration-200">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                </svg>
+            </button>
+        </div>
+        
+        <div class="space-y-4">
+            <div class="bg-gradient-to-r from-blue-50 to-indigo-50 rounded-lg p-3">
+                <label class="text-sm text-gray-600 mb-2 block">Game Day</label>
+                <select id="calcGameSelect" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-sm font-medium">
+                    <option value="">Select game day</option>
+                    <option value="monday">Monday Fire Draw</option>
+                    <option value="tuesday">Tuesday Power Play</option>
+                    <option value="wednesday">Wednesday Diamond Draw</option>
+                    <option value="thursday">Thursday Star Luck</option>
+                    <option value="friday">Friday Bullseye</option>
+                    <option value="saturday">Saturday Mega Win</option>
+                    <option value="sunday">Sunday Lucky Seven</option>
+                </select>
+            </div>
+            
+            <div class="bg-gradient-to-r from-purple-50 to-pink-50 rounded-lg p-3">
+                <label class="text-sm text-gray-600 mb-2 block">Bet Type</label>
+                <select id="calcBetSelect" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-purple-500 text-sm font-medium">
+                    <option value="">Select bet type</option>
+                    <option value="direct1">Direct 1 </option>
+                    <option value="direct2">Direct 2 (2 Sure)</option>
+                    <option value="direct3">Direct 3 </option>
+                    <option value="perm2">Perm 2 </option>
+                    <option value="perm3">Perm 3</option>
+                    <option value="banker">Banker (Best odds)</option>
+                </select>
+            </div>
+            
+            <div class="bg-gradient-to-r from-yellow-50 to-orange-50 rounded-lg p-3">
+                <label class="text-sm text-gray-600 mb-2 block">Your Stake</label>
+                <div class="relative">
+                    <input type="number" id="calcStakeInput" min="1" max="200" placeholder="Enter amount" class="w-full px-3 py-2 pl-8 border border-gray-300 rounded-lg focus:ring-2 focus:ring-yellow-500 focus:border-yellow-500 text-sm font-medium">
+                    <div class="absolute left-3 top-1/2 transform -translate-y-1/2 text-sm font-bold text-yellow-600">₵</div>
+                </div>
+            </div>
+            
+            <div class="bg-gradient-to-r from-green-50 to-emerald-50 rounded-lg p-4 border-2 border-green-200">
+                <div class="text-sm text-gray-600 mb-1">Potential Win</div>
+                <div id="calcPotentialWin" class="text-2xl font-bold text-green-600">₵0</div>
+                <div id="calcMultiplier" class="text-xs text-gray-500 mt-1">Multiplier: 0x</div>
+            </div>
+        </div>
+        
+        <div class="mt-4 text-xs text-gray-500 text-center">
+            💡 Calculations are estimates based on current odds
+        </div>
+    </div>
+
+    <!-- Play a Game Now -->
+    <section class="py-12 sm:py-16 lg:py-20 p-10 bg-gray-200 relative overflow-hidden ">
+        <div class="container mx-auto  bg-white px-4 sm:px-6 lg:px-8 relative shadow-2xl p-10 mb-10 mt-10 ">
+            <div class="text-center mb-12 sm:mb-16 lg:mb-20">            
+                <h2 class="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-extrabold mb-4 sm:mb-6  bg-clip-text text-transparent" style="color: rgb(12, 10, 96);">
+                    Play & Win Today
+                </h2>
+                <p class="text-lg sm:text-xl text-gray-600 max-w-2xl mx-auto px-4">Choose your lucky numbers and join thousands of winners. Your fortune is just one click away!</p>
+            </div>
+            
+            <!-- Main Game Form Container -->
+            <form id="lottoGameForm" class="max-w-6xl mx-auto">
+                
+                <!-- Step 1: Choose Your Game Day -->
+                <div class="border-2 mb-12">
+                    <div class="elegant-border-inner p-10">
+                        <div class="flex items-center mb-8">
+                            <div class="w-14 h-14 bg-gradient-to-r from-purple-500 to-blue-500 rounded-2xl flex items-center justify-center text-white font-bold text-xl mr-6 shadow-lg">1</div>
+                            <div class="hidden sm:block">
+                                <h3 class="text-3xl font-bold text-gray-800 mb-1">Choose Your Game Day</h3>
+                                <p class="text-gray-500">Select when you want to play and win</p>
+                            </div>
+                            <button type="button" id="toggleCalculator" class="bg-gradient-to-r from-green-500 to-emerald-500 text-white px-4 py-2 rounded-xl font-semibold hover:from-green-600 hover:to-emerald-600 transition duration-300 shadow-lg flex items-center">
+                                <span class="text-lg mr-2">💰</span>
+                                <span class="hidden sm:inline">Calculate Winnings</span>
+                                <span class="sm:hidden">Calculator</span>
+                            </button> 
+                        </div>
+                        <div class="grid grid-cols-3 sm:grid-cols-4 lg:grid-cols-7 gap-3">
+                            <!-- Monday Game -->
+                            <button title="Monday Game" type="button" class="game-btn bg-white hover:bg-white text-white w-20 h-20 sm:w-24 sm:h-24 rounded-full font-semibold text-xs transition duration-300 shadow-lg transform hover:scale-105 flex flex-col items-center justify-center space-y-1 border-2 border-transparent" data-game="monday">
+                                <img src="https://placehold.co/80x80/6b7280/ffffff?text=MON" alt="Monday Game" class="rounded-full">
+                                <span class="text-center leading-tight text-black absolute z-10">Monday</span>
+                            </button>
+
+                            <!-- Tuesday Game -->
+                            <button title="Tuesday Game" type="button" class="game-btn bg-white hover:bg-white text-white w-20 h-20 sm:w-24 sm:h-24 rounded-full font-semibold text-xs transition duration-300 shadow-lg transform hover:scale-105 flex flex-col items-center justify-center space-y-1 border-2 border-transparent" data-game="tuesday">
+                                <img src="https://placehold.co/80x80/6b7280/ffffff?text=TUE" alt="Tuesday Game" class="rounded-full">
+                                <span class="text-center leading-tight text-black absolute z-10">Tuesday</span>
+                            </button>
+
+                            <!-- Wednesday Game -->
+                            <button title="Wednesday Game" type="button" class="game-btn bg-white hover:bg-white text-white w-20 h-20 sm:w-24 sm:h-24 rounded-full font-semibold text-xs transition duration-300 shadow-lg transform hover:scale-105 flex flex-col items-center justify-center space-y-1 border-2 border-transparent" data-game="wednesday">
+                                <img src="https://placehold.co/80x80/6b7280/ffffff?text=WED" alt="Wednesday Game" class="rounded-full">
+                                <span class="text-center leading-tight text-black absolute z-10">Wednesday</span>
+                            </button>
+
+                            <!-- Thursday Game -->
+                            <button title="Thursday Game" type="button" class="game-btn bg-white hover:bg-white text-white w-20 h-20 sm:w-24 sm:h-24 rounded-full font-semibold text-xs transition duration-300 shadow-lg transform hover:scale-105 flex flex-col items-center justify-center space-y-1 border-2 border-transparent" data-game="thursday">
+                                <img src="https://placehold.co/80x80/6b7280/ffffff?text=THU" alt="Thursday Game" class="rounded-full">
+                                <span class="text-center leading-tight text-black absolute z-10">Thursday</span>
+                            </button>
+
+                            <!-- Friday Game -->
+                            <button title="Friday Game" type="button" class="game-btn bg-white hover:bg-white text-white w-20 h-20 sm:w-24 sm:h-24 rounded-full font-semibold text-xs transition duration-300 shadow-lg transform hover:scale-105 flex flex-col items-center justify-center space-y-1 border-2 border-transparent" data-game="friday">
+                                <img src="https://placehold.co/80x80/6b7280/ffffff?text=FRI" alt="Friday Game" class="rounded-full">
+                                <span class="text-center leading-tight text-black absolute z-10">Friday</span>
+                            </button>
+
+                            <!-- Saturday Game -->
+                            <button title="Saturday Game" type="button" class="game-btn bg-white hover:bg-white text-white w-20 h-20 sm:w-24 sm:h-24 rounded-full font-semibold text-xs transition duration-300 shadow-lg transform hover:scale-105 flex flex-col items-center justify-center space-y-1 border-2 border-transparent" data-game="saturday">
+                                <img src="https://placehold.co/80x80/6b7280/ffffff?text=SAT" alt="Saturday Game" class="rounded-full">
+                                <span class="text-center leading-tight text-black absolute z-10">Saturday</span>
+                            </button>
+
+                            <!-- Sunday Game -->
+                            <button title="Sunday Game" type="button" class="game-btn bg-white hover:bg-white text-white w-20 h-20 sm:w-24 sm:h-24 rounded-full font-semibold text-xs transition duration-300 shadow-lg transform hover:scale-105 flex flex-col items-center justify-center space-y-1 border-2 border-transparent" data-game="sunday">
+                                <img src="https://placehold.co/80x80/6b7280/ffffff?text=SUN" alt="Sunday Game" class="rounded-full">
+                                <span class="text-center leading-tight text-black absolute z-10">Sunday</span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+
+                <!-- Step 2: Select Bet Type -->
+                <div class="border-2 mb-12">
+                    <div class="elegant-border-inner p-10">
+                        <div class="flex items-center mb-8">
+                            <div class="w-14 h-14 bg-slate-800 rounded-xl flex items-center justify-center text-white font-bold text-xl mr-6 shadow-lg">2</div>
+                            <div class="hidden sm:block">
+                                <h3 class="text-3xl font-bold text-slate-800 mb-1 serif-font">Select Bet Type</h3>
+                                <p class="text-slate-600">Choose your preferred betting strategy</p>
+                            </div>
+                        </div>
+                        
+                        <!-- Bet Type Buttons Grid -->
+                        <div class="grid grid-cols-3 sm:grid-cols-4 lg:grid-cols-7 gap-3">
+                            <button type="button" class="bet-type-btn bg-white border-2 border-slate-200 hover:border-slate-400 text-slate-800 p-3 rounded-lg font-semibold text-sm hover:bg-slate-50 transition duration-300 shadow-md transform hover:scale-102 flex flex-col items-center space-y-1" data-bet="direct1">
+                                <div class="w-6 h-6 bg-slate-800 rounded-full flex items-center justify-center text-white font-bold text-xs">1</div>
+                                <span class="text-center text-xs">Direct 1</span>
+                            </button>
+                            <button type="button" class="bet-type-btn bg-white border-2 border-slate-200 hover:border-slate-400 text-slate-800 p-3 rounded-lg font-semibold text-sm hover:bg-slate-50 transition duration-300 shadow-md transform hover:scale-102 flex flex-col items-center space-y-1" data-bet="direct2">
+                                <div class="w-6 h-6 bg-slate-800 rounded-full flex items-center justify-center text-white font-bold text-xs">2</div>
+                                <span class="text-center text-xs">Direct 2</span>
+                            </button>
+                            <button type="button" class="bet-type-btn bg-white border-2 border-slate-200 hover:border-slate-400 text-slate-800 p-3 rounded-lg font-semibold text-sm hover:bg-slate-50 transition duration-300 shadow-md transform hover:scale-102 flex flex-col items-center space-y-1" data-bet="direct3">
+                                <div class="w-6 h-6 bg-slate-800 rounded-full flex items-center justify-center text-white font-bold text-xs">3</div>
+                                <span class="text-center text-xs">Direct 3</span>
+                            </button>
+                            <button type="button" class="bet-type-btn bg-white border-2 border-slate-200 hover:border-slate-400 text-slate-800 p-3 rounded-lg font-semibold text-sm hover:bg-slate-50 transition duration-300 shadow-md transform hover:scale-102 flex flex-col items-center space-y-1" data-bet="perm2">
+                                <div class="w-6 h-6 bg-slate-800 rounded-full flex items-center justify-center text-white font-bold text-xs">P2</div>
+                                <span class="text-center text-xs">Perm 2</span>
+                            </button>
+                            <button type="button" class="bet-type-btn bg-white border-2 border-slate-200 hover:border-slate-400 text-slate-800 p-3 rounded-lg font-semibold text-sm hover:bg-slate-50 transition duration-300 shadow-md transform hover:scale-102 flex flex-col items-center space-y-1" data-bet="perm3">
+                                <div class="w-6 h-6 bg-slate-800 rounded-full flex items-center justify-center text-white font-bold text-xs">P3</div>
+                                <span class="text-center text-xs">Perm 3</span>
+                            </button>
+                            <button type="button" class="bet-type-btn bg-white border-2 border-slate-200 hover:border-slate-400 text-slate-800 p-3 rounded-lg font-semibold text-sm hover:bg-slate-50 transition duration-300 shadow-md transform hover:scale-102 flex flex-col items-center space-y-1" data-bet="banker_all">
+                                <svg class="w-6 h-6 text-slate-800" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                                </svg>
+                                <span class="text-center text-xs">Banker All</span>
+                            </button>
+                            <button type="button" class="bet-type-btn bg-white border-2 border-slate-200 hover:border-slate-400 text-slate-800 p-3 rounded-lg font-semibold text-sm hover:bg-slate-50 transition duration-300 shadow-md transform hover:scale-102 flex flex-col items-center space-y-1" data-bet="banker_against">
+                                <svg class="w-6 h-6 text-slate-800" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                                </svg>
+                                <span class="text-center text-xs">Banker Against</span>
+                            </button>
+                        </div>                        
+                    </div>
+                </div>
+
+                <!-- Step 3: Set Your Stake & Payment -->
+                <div class="border-2 mb-12 shadow">
+                    <div class="gradient-border-inner p-10">
+                        <div class="flex items-center mb-8">
+                            <div class="w-14 h-14 bg-gradient-to-r from-yellow-500 to-orange-500 rounded-2xl flex items-center justify-center text-white font-bold text-xl mr-6 shadow-lg">3</div>
+                            <div class="hidden sm:block">
+                                <h3 class="text-3xl font-bold text-gray-800 mb-1">Set Your Stake & Payment</h3>
+                                <p class="text-gray-500">Choose your bet amount and payment method</p>
+                            </div>
+                        </div>
+                        
+                        <div class="grid lg:grid-cols-2 gap-6 sm:gap-8 lg:gap-10">
+                            <!-- Stake Amount -->
+                            <div class="bg-gray-50 rounded-xl sm:rounded-2xl p-2 sm:p-4 border-2">
+                                <h4 class="text-xl sm:text-2xl font-bold text-gray-800 mb-4 sm:mb-6 flex items-center">
+                                    <span class="text-2xl sm:text-3xl mr-2 sm:mr-3">
+                                        <img src="https://placehold.co/40x40/008000/ffffff?text=₵" alt="Momo Number" class="w-10 h-10">
+                                    </span>
+                                    Your Stake Amount
+                                </h4>
+                                <div class="relative">
+                                    <input type="number" id="takeAmount" name="takeAmount" min="1" max="200" placeholder="Enter amount" class="w-full px-4 sm:px-6 py-3 sm:py-4 border-2  rounded-xl sm:rounded-2xl focus:ring-4  text-lg sm:text-2xl font-bold text-center bg-white shadow-lg">
+                                </div>
+                                <div class="flex justify-between mt-3 sm:mt-4 text-xs sm:text-sm text-gray-600">
+                                    <span>Minimum: ₵1</span>
+                                    <span>Maximum: ₵200</span>
+                                </div>
+                                <div class="grid grid-cols-2 sm:grid-cols-4 gap-2 mt-4 sm:mt-6">
+                                    <button type="button" class="quick-amount bg-gray-200 hover:bg-yellow-200 text-yellow-800 font-semibold py-2 px-3 sm:px-4 rounded-lg sm:rounded-xl transition duration-200 text-sm sm:text-base" data-amount="5">₵5</button>
+                                    <button type="button" class="quick-amount bg-gray-200 hover:bg-yellow-200 text-yellow-800 font-semibold py-2 px-3 sm:px-4 rounded-lg sm:rounded-xl transition duration-200 text-sm sm:text-base" data-amount="10">₵10</button>
+                                    <button type="button" class="quick-amount bg-gray-200 hover:bg-yellow-200 text-yellow-800 font-semibold py-2 px-3 sm:px-4 rounded-lg sm:rounded-xl transition duration-200 text-sm sm:text-base" data-amount="20">₵20</button>
+                                    <button type="button" class="quick-amount bg-gray-200 hover:bg-yellow-200 text-yellow-800 font-semibold py-2 px-3 sm:px-4 rounded-lg sm:rounded-xl transition duration-200 text-sm sm:text-base" data-amount="50">₵50</button>
+                                </div>
+                            </div>
+
+                            <!-- Mobile Money Payment -->
+                            <div class="bg-gradient-to-br from-blue-50 to-indigo-50 rounded-xl sm:rounded-2xl p-6 sm:p-8 border border-blue-200">
+                                <h4 class="text-xl sm:text-2xl font-bold text-gray-800 mb-4 sm:mb-6 flex items-center">
+                                    Mobile Money Payment
+                                </h4>
+                                
+                                <!-- Network Selection -->
+                                <div class="grid grid-cols-3 gap-2 sm:gap-3 mb-4 sm:mb-6">
+                                    <label  class="network-option flex flex-col items-center cursor-pointer bg-white rounded-full sm:rounded-full p-3 sm:p-4 hover:bg-yellow-50 transition duration-200 border-2 border-transparent hover:border-yellow-300 group">
+                                        <input type="radio" name="network" value="mtn" class="sr-only">
+                                        <div  class="w-15 h-15 sm:w-15 sm:h-15 bg-yellow-200 rounded-full sm:rounded-full flex items-center justify-center group-hover:scale-110 transition-transform">
+                                            <img src="https://placehold.co/60x60/FFD700/000000?text=MTN" alt="MTN MOMO" class="rounded-full sm:rounded-full">
+                                        </div>
+                                    </label>
+                                    <label class="network-option flex flex-col items-center cursor-pointer bg-white rounded-full sm:rounded-full p-3 sm:p-4 hover:bg-red-50 transition duration-200 border-2 border-transparent hover:border-red-300 group">
+                                        <input type="radio" name="network" value="telecel" class="sr-only">
+                                        <div class="w-15 h-15 sm:w-15 sm:h-15 bg-red-200 rounded-full sm:rounded-full flex items-center justify-center group-hover:scale-110 transition-transform">
+                                            <img src="https://placehold.co/60x60/DC143C/ffffff?text=VOD" alt="Telecel" class="rounded-full sm:rounded-full">
+                                        </div>
+                                    </label>
+                                    <label class="network-option flex flex-col items-center cursor-pointer bg-white rounded-full sm:rounded-full p-3 sm:p-4 hover:bg-blue-50 transition duration-200 border-2 border-transparent hover:border-blue-300 group">
+                                        <input type="radio" name="network" value="tigo" class="sr-only">
+                                        <div class="w-15 h-15 sm:w-15 sm:h-15 bg-blue-200 rounded-full sm:rounded-full flex items-center justify-center group-hover:scale-110 transition-transform">
+                                            <img src="https://placehold.co/60x60/1E90FF/ffffff?text=AIR" alt="airtel Tigo" class="rounded-full sm:rounded-full">
+                                        </div>
+                                    </label>
+                                </div>
+                                
+                                <!-- Phone Number -->
+                                <input type="tel" id="momoNumber" name="momoNumber" placeholder="0XX XXX XXXX" class="w-full px-4 sm:px-6 py-3 sm:py-4 border-2 border-blue-300 rounded-xl sm:rounded-2xl focus:ring-4 focus:ring-blue-200 focus:border-blue-500 text-lg sm:text-xl font-semibold text-center bg-white shadow-lg">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Step 4: Select Your Lucky Numbers -->
+                <div class="shadow mb-12 border-2">
+                    <div class="gradient-border-inner p-10">
+                        <div class="flex items-center mb-8">
+                            <div class="w-14 h-14 bg-gradient-to-r from-pink-500 to-purple-500 rounded-2xl flex items-center justify-center text-white font-bold text-xl mr-6 shadow-lg">4</div>
+                            <div class="hidden sm:block">
+                                <h3 class="text-3xl font-bold text-gray-800 mb-1">Select Your Lucky Numbers</h3>
+                                <p class="text-gray-500">Choose the numbers that will make you rich</p>
+                            </div>
+                        </div>
+                        
+                        <!-- Selected Numbers Display -->
+                        <div class="bg-blue-500 rounded-2xl shadow p-4 mb-5">
+                            <h4 class="text-white text-2xl font-bold mb-2 text-center flex items-center justify-center">
+                                Your Lucky Numbers
+                            </h4>
+                            <div id="selectedNumbers" class="flex flex-wrap justify-center gap-3 min-h-[80px] items-center">
+                                <span class="text-white/70 text-lg italic">Click numbers below to select your fortune</span>
+                            </div>
+                        </div>
+
+                        <!-- Number Grid -->
+                        <div class="bg-gradient-to-br from-slate-50 to-blue-50 rounded-2xl p-8 border border-slate-200">
+                            <div class="text-center mb-6">
+                                <h5 class="text-xl font-bold text-gray-700 mb-2">Choose from 1 to 90</h5>
+                            </div>
+                            <div class="grid grid-cols-6 sm:grid-cols-8 md:grid-cols-9 lg:grid-cols-10 gap-2 sm:gap-3 max-w-5xl mx-auto" id="numberGrid">
+                                <!-- Numbers 1-90 will be generated by JavaScript -->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Action Buttons -->
+                <div>
+                    <div class=" p-10">
+                        <div class="flex flex-col sm:flex-row gap-4 sm:gap-6 justify-center items-center">
+                            <button type="button" id="clearNumbers" class="bg-gradient-to-r from-slate-400 to-slate-600 text-white px-6 sm:px-10 py-3 sm:py-4 rounded-xl sm:rounded-2xl font-bold text-base sm:text-lg hover:from-slate-500 hover:to-slate-700 transition duration-300 shadow-xl hover:shadow-2xl flex items-center group">
+                                Reset
+                            </button>
+                            <button type="submit" id="playNow" class="bg-gradient-to-r from-green-400 via-emerald-500 to-teal-500 text-white px-8 sm:px-16 py-4 sm:py-5 rounded-xl sm:rounded-2xl font-extrabold text-lg sm:text-2xl hover:from-green-500 hover:via-emerald-600 hover:to-teal-600 transition duration-300 shadow-2xl transform hover:scale-105 flex items-center group relative overflow-hidden">
+                                <span class="relative z-10">PLAY NOW & WIN!</span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+            </form>
+        </div>
+    </section>
+
+    <!-- Game Result -->
+    <section class="py-12 sm:py-16 lg:py-20 bg-gradient-to-br from-gray-900 via-slate-800 to-gray-900 relative overflow-hidden">
+        <div class="container mx-auto px-4 sm:px-6 lg:px-8 relative">
+            <div class="text-center">
+                <h4 class="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-extrabold mb-4 sm:mb-6 text-white glow-text">
+                    Draw Result
+                </h4>
+            </div>
+            <div class="max-w-7xl mx-auto space-y-8 px-10">   
+                <!-- Noon Rush Game Results -->
+                <div class="glass-effect rounded-3xl p-10 border border-white/20">
+                    <div class="flex flex-col lg:flex-row items-center justify-between">
+                        <div class="mb-6 lg:mb-0 text-center lg:text-left">
+                            <h3 class="text-3xl font-bold text-yellow-400 mb-3 flex items-center justify-center lg:justify-start">                                
+                                Noon Rush
+                            </h3>
+                        </div>
+                        <div class="flex items-center space-x-4">
+                            <div class="w-20 h-20 bg-gradient-to-br from-yellow-400 to-yellow-600 rounded-full flex items-center justify-center text-white font-bold text-2xl shadow-2xl lottery-ball">12</div>
+                            <div class="w-20 h-20 bg-gradient-to-br from-yellow-400 to-yellow-600 rounded-full flex items-center justify-center text-white font-bold text-2xl shadow-2xl lottery-ball" style="animation-delay: 0.1s;">34</div>
+                            <div class="w-20 h-20 bg-gradient-to-br from-yellow-400 to-yellow-600 rounded-full flex items-center justify-center text-white font-bold text-2xl shadow-2xl lottery-ball" style="animation-delay: 0.2s;">56</div>
+                            <div class="w-20 h-20 bg-gradient-to-br from-yellow-400 to-yellow-600 rounded-full flex items-center justify-center text-white font-bold text-2xl shadow-2xl lottery-ball" style="animation-delay: 0.3s;">78</div>
+                            <div class="w-20 h-20 bg-gradient-to-br from-yellow-400 to-yellow-600 rounded-full flex items-center justify-center text-white font-bold text-2xl shadow-2xl lottery-ball" style="animation-delay: 0.4s;">90</div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+
+     <!-- How to play  -->
+    <section class="py-12 sm:py-16 lg:py-20 bg-white relative overflow-hidden">       
+        
+        <div class="container mx-auto px-4 sm:px-6 lg:px-8 relative shadow-2xl">
+            <div class="text-center mb-12 sm:mb-16 mt-5">               
+                <h2 class="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-extrabold mb-4 sm:mb-6 text-black" style="font-family: 'DM Display';">
+                    How to play
+                </h2>
+                <p class="text-lg sm:text-xl text-gray-300 max-w-2xl mx-auto px-4">
+                    Check out today's winning numbers and see if you're our next big winner!
+                </p>
+            </div>
+            <div class="max-w-7xl mx-auto space-y-8">
+                <div class="flex-row">
+                    
+
+                </div>
+                
+
+
+            
+
+            </div>
+        </div>
+    </section>
+
+
+
+
+    <!-- Footer -->
+    <footer class="bg-gradient-to-br from-gray-900 via-slate-900 to-black text-white py-12 sm:py-16 relative overflow-hidden">
+        <!-- Background Effects -->
+        <div class="absolute inset-0 opacity-5">
+            <div class="absolute top-10 left-10 w-32 h-32 sm:w-40 sm:h-40 bg-yellow-400 rounded-full blur-3xl"></div>
+            <div class="absolute bottom-10 right-10 w-24 h-24 sm:w-32 sm:h-32 bg-purple-500 rounded-full blur-3xl"></div>
+        </div>
+        
+        <div class="container mx-auto px-4 sm:px-6 lg:px-8 relative">
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-8 sm:gap-10">
+                <div class="md:col-span-2">
+                    <div class="flex items-center space-x-3 sm:space-x-4 mb-4 sm:mb-6">
+                        <div class="w-12 h-12 sm:w-16 sm:h-16 glass-effect rounded-xl sm:rounded-2xl flex items-center justify-center floating-animation">
+                            <span class="text-3xl sm:text-4xl">🍀</span>
+                        </div>
+                        <div>
+                            <span class="text-2xl sm:text-3xl font-bold glow-text">LuckyWin</span>
+                            <div class="text-yellow-400 font-bold text-base sm:text-lg">LOTTO</div>
+                        </div>
+                    </div>
+                    <p class="text-gray-300 text-base sm:text-lg mb-4 sm:mb-6 max-w-md">Ghana's most trusted lottery platform. Play smart, win big, and change your life forever.</p>
+                    <div class="flex space-x-3 sm:space-x-4">
+                        <div class="w-10 h-10 sm:w-12 sm:h-12 glass-effect rounded-lg sm:rounded-xl flex items-center justify-center hover:bg-white/20 transition duration-300 cursor-pointer">
+                            <span class="text-lg sm:text-2xl">📘</span>
+                        </div>
+                        <div class="w-10 h-10 sm:w-12 sm:h-12 glass-effect rounded-lg sm:rounded-xl flex items-center justify-center hover:bg-white/20 transition duration-300 cursor-pointer">
+                            <span class="text-lg sm:text-2xl">📱</span>
+                        </div>
+                        <div class="w-10 h-10 sm:w-12 sm:h-12 glass-effect rounded-lg sm:rounded-xl flex items-center justify-center hover:bg-white/20 transition duration-300 cursor-pointer">
+                            <span class="text-lg sm:text-2xl">📧</span>
+                        </div>
+                    </div>
+                </div>
+                <div>
+                    <h3 class="font-bold text-lg sm:text-xl mb-4 sm:mb-6 text-yellow-400">Quick Links</h3>
+                    <ul class="space-y-2 sm:space-y-3">
+                        <li><a href="#" class="text-gray-300 hover:text-yellow-400 transition duration-300 flex items-center text-sm sm:text-base"><span class="mr-2">🏠</span>Home</a></li>
+                        <li><a href="#" class="text-gray-300 hover:text-yellow-400 transition duration-300 flex items-center text-sm sm:text-base"><span class="mr-2">🎰</span>Play Games</a></li>
+                        <li><a href="#" class="text-gray-300 hover:text-yellow-400 transition duration-300 flex items-center text-sm sm:text-base"><span class="mr-2">🏆</span>Results</a></li>
+                        <li><a href="#" class="text-gray-300 hover:text-yellow-400 transition duration-300 flex items-center text-sm sm:text-base"><span class="mr-2">💰</span>Winnings</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h3 class="font-bold text-lg sm:text-xl mb-4 sm:mb-6 text-yellow-400">Support</h3>
+                    <ul class="space-y-2 sm:space-y-3">
+                        <li><a href="#" class="text-gray-300 hover:text-yellow-400 transition duration-300 flex items-center text-sm sm:text-base"><span class="mr-2">📞</span>Contact Us</a></li>
+                        <li><a href="#" class="text-gray-300 hover:text-yellow-400 transition duration-300 flex items-center text-sm sm:text-base"><span class="mr-2">❓</span>How to Play</a></li>
+                        <li><a href="#" class="text-gray-300 hover:text-yellow-400 transition duration-300 flex items-center text-sm sm:text-base"><span class="mr-2">🛡️</span>Responsible Gaming</a></li>
+                        <li><a href="#" class="text-gray-300 hover:text-yellow-400 transition duration-300 flex items-center text-sm sm:text-base"><span class="mr-2">📋</span>Terms & Conditions</a></li>
+                    </ul>
+                </div>
+            </div>
+            
+            <!-- Contact Info -->
+            <div class="mt-8 sm:mt-12 pt-6 sm:pt-8 border-t border-gray-700">
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-4 sm:gap-6 text-center">
+                    <div class="glass-effect rounded-xl sm:rounded-2xl p-4 sm:p-6">
+                        <div class="text-2xl sm:text-3xl mb-1 sm:mb-2">📍</div>
+                        <h4 class="font-bold text-yellow-400 mb-1 text-sm sm:text-base">Location</h4>
+                        <p class="text-gray-300 text-sm sm:text-base">Accra, Ghana</p>
+                    </div>
+                    <div class="glass-effect rounded-xl sm:rounded-2xl p-4 sm:p-6">
+                        <div class="text-2xl sm:text-3xl mb-1 sm:mb-2">📞</div>
+                        <h4 class="font-bold text-yellow-400 mb-1 text-sm sm:text-base">Phone</h4>
+                        <p class="text-gray-300 text-sm sm:text-base">+233 XX XXX XXXX</p>
+                    </div>
+                    <div class="glass-effect rounded-xl sm:rounded-2xl p-4 sm:p-6">
+                        <div class="text-2xl sm:text-3xl mb-1 sm:mb-2">✉️</div>
+                        <h4 class="font-bold text-yellow-400 mb-1 text-sm sm:text-base">Email</h4>
+                        <p class="text-gray-300 text-sm sm:text-base">info@luckywinlotto.com.gh</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="border-t border-gray-700 mt-8 sm:mt-12 pt-6 sm:pt-8 text-center">
+                <p class="text-gray-400 text-sm sm:text-lg">&copy; 2024 LuckyWin Lotto. All rights reserved. Play responsibly. 18+</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Custom Modal for Messages -->
+    <div id="customModal" class="custom-modal">
+        <div class="custom-modal-content">
+            <div class="custom-modal-header">
+                <h5 id="modalTitle"></h5>
+            </div>
+            <div class="custom-modal-body">
+                <p id="modalMessage"></p>
+            </div>
+            <div class="custom-modal-footer">
+                <button type="button" class="close-modal-btn">OK</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bootstrap Bundle with Popper -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
+    
+    <script>
+        // --- Navigation and Calculator Logic ---
+        const burgerMenu = document.getElementById('burgerMenu');
+        const asideNav = document.getElementById('asideNav');
+        const closeNav = document.getElementById('closeNav');
+        const overlay = document.getElementById('overlay');
+        const navCalculatorButtons = document.querySelectorAll('#navCalculator'); // Both nav and aside
+        const winningsCalculator = document.getElementById('winningsCalculator');
+        const closeCalculatorButton = document.getElementById('closeCalculator');
+        const toggleCalculatorButton = document.getElementById('toggleCalculator'); // Button in "Play a Game Now" section
+
+        // Toggle Aside Navigation
+        function toggleAsideNav() {
+            if (asideNav.classList.contains('-translate-x-full')) {
+                asideNav.classList.remove('-translate-x-full');
+                overlay.classList.remove('opacity-0', 'pointer-events-none');
+                overlay.classList.add('opacity-100', 'pointer-events-auto');
+            } else {
+                asideNav.classList.add('-translate-x-full');
+                overlay.classList.remove('opacity-100', 'pointer-events-auto');
+                overlay.classList.add('opacity-0', 'pointer-events-none');
+            }
+        }
+
+        burgerMenu.addEventListener('click', toggleAsideNav);
+        closeNav.addEventListener('click', toggleAsideNav);
+        overlay.addEventListener('click', toggleAsideNav);
+
+        // Toggle Winnings Calculator
+        function toggleWinningsCalculator() {
+            if (winningsCalculator.classList.contains('translate-x-full')) {
+                winningsCalculator.classList.remove('translate-x-full', 'hidden');
+                winningsCalculator.classList.add('translate-x-0');
+            } else {
+                winningsCalculator.classList.remove('translate-x-0');
+                winningsCalculator.classList.add('translate-x-full', 'hidden');
+            }
+        }
+
+        navCalculatorButtons.forEach(button => {
+            button.addEventListener('click', (event) => {
+                event.preventDefault(); // Prevent default link behavior
+                toggleWinningsCalculator();
+            });
+        });
+        closeCalculatorButton.addEventListener('click', toggleWinningsCalculator);
+        toggleCalculatorButton.addEventListener('click', toggleWinningsCalculator);
+
+
+        // Calculator Logic (simplified for demonstration)
+        const calcGameSelect = document.getElementById('calcGameSelect');
+        const calcBetSelect = document.getElementById('calcBetSelect');
+        const calcStakeInput = document.getElementById('calcStakeInput');
+        const calcPotentialWin = document.getElementById('calcPotentialWin');
+        const calcMultiplier = document.getElementById('calcMultiplier');
+
+        function calculateWinnings() {
+            const gameDay = calcGameSelect.value;
+            const betType = calcBetSelect.value;
+            const stake = parseFloat(calcStakeInput.value);
+
+            if (!gameDay || !betType || isNaN(stake) || stake <= 0) {
+                calcPotentialWin.textContent = '₵0';
+                calcMultiplier.textContent = 'Multiplier: 0x';
+                return;
+            }
+
+            let multiplier = 0;
+            // Simplified multipliers for demonstration
+            switch (betType) {
+                case 'direct1': multiplier = 10; break;
+                case 'direct2': multiplier = 50; break;
+                case 'direct3': multiplier = 200; break;
+                case 'perm2': multiplier = 5; break;
+                case 'perm3': multiplier = 15; break;
+                case 'banker': multiplier = 100; break;
+                default: multiplier = 0;
+            }
+
+            const potentialWin = stake * multiplier;
+            calcPotentialWin.textContent = `₵${potentialWin.toFixed(2)}`;
+            calcMultiplier.textContent = `Multiplier: ${multiplier}x`;
+        }
+
+        calcGameSelect.addEventListener('change', calculateWinnings);
+        calcBetSelect.addEventListener('change', calculateWinnings);
+        calcStakeInput.addEventListener('input', calculateWinnings);
+
+
+        // --- Lotto Number Selector Logic ---
+        const numberGrid = document.getElementById('numberGrid');
+        const selectedNumbersOutput = document.getElementById('selectedNumbers'); // Changed from selectedNumbersOutput to match HTML
+        const clearSelectionButton = document.getElementById('clearNumbers'); // Changed from clearSelection to match HTML
+        const playNowButton = document.getElementById('playNow');
+
+        const customModal = document.getElementById('customModal');
+        const modalTitle = document.getElementById('modalTitle');
+        const modalMessage = document.getElementById('modalMessage');
+        const closeModalBtn = customModal.querySelector('.close-modal-btn');
+
+        let selectedNumbers = [];
+        const MAX_SELECTIONS = 6; // Maximum numbers a user can select
+
+        // Function to show custom modal
+        function showCustomModal(title, message) {
+            modalTitle.textContent = title;
+            modalMessage.textContent = message;
+            customModal.style.display = 'flex'; // Use flex to center
+        }
+
+        // Function to hide custom modal
+        function hideCustomModal() {
+            customModal.style.display = 'none';
+        }
+
+        // Event listener for closing the modal
+        closeModalBtn.addEventListener('click', hideCustomModal);
+
+        // Generate number buttons (1 to 90)
+        for (let i = 1; i <= 90; i++) {
+            const button = document.createElement('div');
+            button.classList.add('number-button');
+            button.textContent = i;
+            button.dataset.number = i; // Store the number as a data attribute
+
+            button.addEventListener('click', () => {
+                const number = parseInt(button.dataset.number);
+                const index = selectedNumbers.indexOf(number);
+
+                if (index === -1) {
+                    // Number not selected, add it if not at max
+                    if (selectedNumbers.length < MAX_SELECTIONS) {
+                        selectedNumbers.push(number);
+                        button.classList.add('selected');
+                    } else {
+                        showCustomModal('Selection Limit Reached', `You can only select up to ${MAX_SELECTIONS} numbers.`);
+                    }
+                } else {
+                    // Number already selected, remove it
+                    selectedNumbers.splice(index, 1);
+                    button.classList.remove('selected');
+                }
+                updateSelectedNumbersDisplay();
+            });
+            numberGrid.appendChild(button);
+        }
+
+        // Update the display of selected numbers
+        function updateSelectedNumbersDisplay() {
+            if (selectedNumbers.length === 0) {
+                selectedNumbersOutput.innerHTML = '<span class="text-white/70 text-lg italic">Click numbers below to select your fortune</span>';
+            } else {
+                // Sort numbers for better readability
+                const sortedNumbers = [...selectedNumbers].sort((a, b) => a - b);
+                selectedNumbersOutput.innerHTML = sortedNumbers.map(num =>
+                    `<span class="selected-number-badge">${num}</span>`
+                ).join('');
+            }
+        }
+
+        // Clear all selected numbers
+        clearSelectionButton.addEventListener('click', () => {
+            selectedNumbers.forEach(num => {
+                const button = document.querySelector(`.number-button[data-number="${num}"]`);
+                if (button) {
+                    button.classList.remove('selected');
+                }
+            });
+            selectedNumbers = [];
+            updateSelectedNumbersDisplay();
+            showCustomModal('Selection Cleared', 'All your selected numbers have been cleared.');
+        });
+
+        // Handle Play Now button click
+        playNowButton.addEventListener('click', (event) => {
+            event.preventDefault(); // Prevent form submission for now
+            if (selectedNumbers.length === 0) {
+                showCustomModal('No Numbers Selected', 'Please select at least one number to play.');
+            } else {
+                const sortedNumbers = [...selectedNumbers].sort((a, b) => a - b);
+                showCustomModal('Ready to Play!', `You have selected: ${sortedNumbers.join(', ')}. Good luck!`);
+                // Here you would typically send the selected numbers to a backend
+                console.log('Numbers submitted:', sortedNumbers);
+            }
+        });
+
+        // Handle Game Day button clicks (to add 'selected' class)
+        const gameButtons = document.querySelectorAll('.game-btn');
+        gameButtons.forEach(button => {
+            button.addEventListener('click', () => {
+                gameButtons.forEach(btn => btn.classList.remove('selected'));
+                button.classList.add('selected');
+            });
+        });
+
+        // Handle Bet Type button clicks (to add 'selected' class)
+        const betTypeButtons = document.querySelectorAll('.bet-type-btn');
+        betTypeButtons.forEach(button => {
+            button.addEventListener('click', () => {
+                betTypeButtons.forEach(btn => btn.classList.remove('selected'));
+                button.classList.add('selected');
+            });
+        });
+
+        // Handle Network option clicks (to add 'selected' class and check radio)
+        const networkOptions = document.querySelectorAll('.network-option');
+        networkOptions.forEach(label => {
+            const radio = label.querySelector('input[type="radio"]');
+            label.addEventListener('click', () => {
+                networkOptions.forEach(opt => opt.querySelector('div').style.borderColor = 'transparent');
+                label.querySelector('div').style.borderColor = '#007bff'; // Bootstrap primary blue
+                radio.checked = true;
+            });
+        });
+
+        // Handle Quick Amount buttons
+        const quickAmountButtons = document.querySelectorAll('.quick-amount');
+        const takeAmountInput = document.getElementById('takeAmount');
+        quickAmountButtons.forEach(button => {
+            button.addEventListener('click', () => {
+                takeAmountInput.value = button.dataset.amount;
+                calculateWinnings(); // Recalculate if stake changes
+            });
+        });
+
+        // Initial display update for lotto numbers
+        updateSelectedNumbersDisplay();
+    </script>
+</body>
+</html>
