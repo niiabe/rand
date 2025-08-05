@@ -1,0 +1,178 @@
+  * {
+            font-family: 'DM Display', sans-serif;
+        }
+        .hero-gradient {
+            background: linear-gradient(135deg, rgba(15, 15, 35, 0.95) 0%, rgba(26, 26, 62, 0.95) 20%, rgba(45, 27, 105, 0.95) 40%, rgba(139, 92, 246, 0.95) 60%, rgba(245, 158, 11, 0.95) 80%, rgba(239, 68, 68, 0.95) 100%),
+                        url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 600"><defs><linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" style="stop-color:%23f3f4f6"/><stop offset="100%" style="stop-color:%23e5e7eb"/></linearGradient></defs><rect width="800" height="600" fill="url(%23bg)"/><g transform="translate(400,300)"><circle cx="0" cy="-80" r="60" fill="%23fbbf24" opacity="0.8"/><rect x="-40" y="-20" width="80" height="100" rx="40" fill="%23374151"/><rect x="-35" y="-15" width="70" height="90" rx="35" fill="%23f59e0b"/><circle cx="0" cy="-60" r="25" fill="%23fde68a"/><circle cx="-8" cy="-65" r="3" fill="%23374151"/><circle cx="8" cy="-65" r="3" fill="%23374151"/><path d="M -8,-55 Q 0,-50 8,-55" stroke="%23374151" stroke-width="2" fill="none"/><rect x="-50" y="20" width="100" height="60" rx="10" fill="%23dc2626"/><text x="0" y="45" text-anchor="middle" fill="white" font-family="Arial" font-size="12" font-weight="bold">WINNER!</text><g transform="translate(-60,-40)"><rect width="8" height="40" fill="%23f59e0b" rx="4"/><circle cx="4" cy="-5" r="8" fill="%23fde68a"/></g><g transform="translate(60,-40)"><rect width="8" height="40" fill="%23f59e0b" rx="4"/><circle cx="4" cy="-5" r="8" fill="%23fde68a"/></g><g transform="translate(-80,60)"><rect width="15" height="40" fill="%23374151" rx="7"/><rect width="12" height="25" fill="%23f59e0b" rx="6" x="1.5" y="15"/></g><g transform="translate(80,60)"><rect width="15" height="40" fill="%23374151" rx="7"/><rect width="12" height="25" fill="%23f59e0b" rx="6" x="1.5" y="15"/></g><g transform="translate(-100,-100)"><text font-family="Arial" font-size="24" fill="%23fbbf24" font-weight="bold">₵</text></g><g transform="translate(100,-100)"><text font-family="Arial" font-size="24" fill="%23fbbf24" font-weight="bold">₵</text></g><g transform="translate(-120,20)"><text font-family="Arial" font-size="20" fill="%23fbbf24" font-weight="bold">₵</text></g><g transform="translate(120,20)"><text font-family="Arial" font-size="20" fill="%23fbbf24" font-weight="bold">₵</text></g><g transform="translate(0,-150)"><polygon points="0,0 -10,20 10,20" fill="%23fbbf24"/><rect x="-2" y="20" width="4" height="30" fill="%23f59e0b"/></g></g></svg>');
+            background-size: 600% 600%, cover;
+            background-position: center center, center center;
+            background-repeat: no-repeat;
+            animation: gradientShift 12s ease infinite;
+            position: relative;
+            overflow: hidden;
+        }
+        .hero-gradient::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(45deg, 
+                rgba(255, 0, 150, 0.8) 0%, 
+                rgba(0, 204, 255, 0.8) 50%, 
+                rgba(255, 215, 0, 0.8) 100%);
+            clip-path: polygon(0 0, 100% 0, 0 100%);
+            transition: all 0.8s ease;
+            z-index: 1;
+        }
+        .hero-gradient::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(-45deg, 
+                rgba(138, 43, 226, 0.8) 0%, 
+                rgba(255, 69, 0, 0.8) 50%, 
+                rgba(50, 205, 50, 0.8) 100%);
+            clip-path: polygon(100% 0, 100% 100%, 0 100%);
+            transition: all 0.8s ease;
+            z-index: 1;
+        }
+        .hero-gradient:hover::before {
+            background: linear-gradient(45deg, 
+                rgba(255, 20, 147, 1) 0%, 
+                rgba(0, 191, 255, 1) 50%, 
+                rgba(255, 215, 0, 1) 100%);
+            clip-path: polygon(0 0, 70% 0, 0 70%);
+            transform: scale(1.1);
+        }
+        .hero-gradient:hover::after {
+            background: linear-gradient(-45deg, 
+                rgba(148, 0, 211, 1) 0%, 
+                rgba(255, 99, 71, 1) 50%, 
+                rgba(34, 139, 34, 1) 100%);
+            clip-path: polygon(30% 0, 100% 0, 100% 100%, 0 100%);
+            transform: scale(1.1);
+        }
+        @keyframes gradientShift {
+            0% { background-position: 0% 50%; }
+            33% { background-position: 100% 50%; }
+            66% { background-position: 50% 100%; }
+            100% { background-position: 0% 50%; }
+        }
+        .glass-effect {
+            background: rgba(255, 255, 255, 0.08);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+        }
+        .floating-animation {
+            animation: float 8s ease-in-out infinite;
+        }
+        @keyframes float {
+            0%, 100% { transform: translateY(0px) rotate(0deg); }
+            25% { transform: translateY(-15px) rotate(2deg); }
+            50% { transform: translateY(-25px) rotate(0deg); }
+            75% { transform: translateY(-10px) rotate(-2deg); }
+        }
+        .premium-glow {
+            box-shadow: 0 0 50px rgba(255, 215, 0, 0.3), 0 0 100px rgba(139, 92, 246, 0.2);
+        }
+        .text-shimmer {
+            background: linear-gradient(45deg, #ffd700, #ffed4e, #ffd700);
+            background-size: 200% 200%;
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+            animation: shimmer 3s ease-in-out infinite;
+        }
+        @keyframes shimmer {
+            0%, 100% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+        }
+        .game-btn.selected {
+            transform: scale(1.1);
+            box-shadow: 0 0 30px rgba(23, 21, 12, 0.8);
+            border: 3px solid #141207;
+        }
+        .bet-type-btn.selected {
+            transform: scale(1.1);
+            box-shadow: 0 0 30px rgba(255, 215, 0, 0.8);
+            border: 3px solid #ffd700;
+        }
+        .lottery-ball {
+            animation: bounce 3s ease-in-out infinite;
+            position: relative;
+        }
+        .lottery-ball::before {
+            content: '';
+            position: absolute;
+            top: -5px;
+            left: -5px;
+            right: -5px;
+            bottom: -5px;
+            background: linear-gradient(45deg, rgba(255, 215, 0, 0.4), rgba(255, 255, 255, 0.2));
+            border-radius: 50%;
+            z-index: -1;
+            animation: pulse 2s ease-in-out infinite;
+        }
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0px) scale(1); }
+            25% { transform: translateY(-15px) scale(1.05); }
+            50% { transform: translateY(-25px) scale(1.1); }
+            75% { transform: translateY(-10px) scale(1.02); }
+        }
+        @keyframes pulse {
+            0%, 100% { opacity: 0.5; transform: scale(1); }
+            50% { opacity: 1; transform: scale(1.1); }
+        }
+        .glow-text {
+            text-shadow: 0 0 20px rgba(255, 255, 255, 0.5);
+        }
+        .modern-card {
+            background: linear-gradient(145deg, #ffffff 0%, #f8fafc 50%, #f1f5f9 100%);
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.15), 
+                        0 0 0 1px rgba(255, 255, 255, 0.8),
+                        inset 0 1px 0 rgba(255, 255, 255, 0.9);
+            border: 1px solid rgba(255, 255, 255, 0.9);
+            position: relative;
+            overflow: hidden;
+        }
+        .modern-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.4), transparent);
+            transition: left 0.5s;
+        }
+        .modern-card:hover::before {
+            left: 100%;
+        }
+        .gradient-border {
+            background: linear-gradient(45deg, #ffd700, #ff6b35, #8b5cf6, #06b6d4, #10b981);
+            background-size: 300% 300%;
+            animation: gradientRotate 6s ease infinite;
+            padding: 3px;
+            border-radius: 20px;
+            position: relative;
+        }
+        @keyframes gradientRotate {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+        .gradient-border-inner {
+            background: linear-gradient(145deg, #ffffff 0%, #f8fafc 100%);
+            border-radius: 17px;
+            position: relative;
+            z-index: 1;
+        }
+
+
+        /* Elegr */
