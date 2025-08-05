@@ -18,7 +18,7 @@
     <meta property="og:image" content="https://placehold.co/1200x630/007bff/ffffff?text=Rand+Lottery">
 
     <!-- Favicon-->
-    <link rel="icon" type="image/x-icon" href="https://placehold.co/32x32/007bff/ffffff?text=RL" />
+    <link rel="icon" type="image/x-xicon" href="https://placehold.co/32x32/007bff/ffffff?text=RL" />
     
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
@@ -80,7 +80,7 @@
 
         /* Lotto Number Selector Specific Styles */
         .number-grid {
-            display: grid;
+            display: grid; /* Keep grid for number buttons as it's cleaner for fixed-size items */
             grid-template-columns: repeat(auto-fit, minmax(50px, 1fr)); /* Responsive grid */
             gap: 10px;
             max-width: 800px;
@@ -206,8 +206,29 @@
         .game-btn {
             position: relative;
             overflow: hidden;
-            background-size: cover;
-            background-position: center;
+            background-color: #ffffff; /* Default background */
+            border-radius: 50%;
+            font-weight: 600;
+            font-size: 0.75rem; /* text-xs */
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            border: 2px solid transparent;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            width: 100%; /* Make button fill its column */
+            padding-top: 100%; /* Creates a square aspect ratio */
+            position: relative; /* For absolute positioning of inner elements */
+            text-decoration: none; /* Remove underline for anchor if used */
+        }
+        .game-btn:hover {
+            transform: scale(1.05);
+            box-shadow: 0 8px 12px rgba(0,0,0,0.15);
+        }
+        .game-btn.selected {
+            border-color: #a78bfa; /* purple-400 */
+            box-shadow: 0 0 15px rgba(167, 139, 250, 0.7);
         }
         .game-btn img {
             position: absolute;
@@ -217,20 +238,18 @@
             height: 100%;
             object-fit: cover;
             border-radius: 50%;
+            z-index: 0; /* Behind the text */
         }
         .game-btn span {
-            position: relative;
+            position: absolute; /* Position text over image */
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%); /* Center text */
             z-index: 1;
             color: white; /* Default text color */
-            text-shadow: 0 0 5px rgba(0,0,0,0.5); /* Add text shadow for readability */
+            text-shadow: 0 0 5px rgba(0,0,0,0.8), 0 0 10px rgba(0,0,0,0.6); /* Stronger text shadow for readability */
+            white-space: nowrap; /* Prevent text wrapping */
         }
-        .game-btn[data-game="monday"] span { color: #fff; } /* Example: specific color for Monday */
-        .game-btn[data-game="tuesday"] span { color: #fff; }
-        .game-btn[data-game="wednesday"] span { color: #fff; }
-        .game-btn[data-game="thursday"] span { color: #fff; }
-        .game-btn[data-game="friday"] span { color: #fff; }
-        .game-btn[data-game="saturday"] span { color: #fff; }
-        .game-btn[data-game="sunday"] span { color: #fff; }
 
         .network-option input:checked + div {
             border: 2px solid #007bff; /* Highlight selected network */
@@ -244,11 +263,71 @@
         }
         .network-option div {
             border: 2px solid transparent; /* Default border for network options */
+            transition: all 0.2s ease;
+            padding: 0.75rem; /* p-3 */
+            border-radius: 9999px; /* rounded-full */
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 100%; /* Fill column */
+            padding-top: 100%; /* Square aspect ratio */
+            position: relative;
         }
+        .network-option:hover div {
+            transform: scale(1.1);
+        }
+        .network-option div img {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+            border-radius: 50%;
+        }
+
         .bet-type-btn.selected {
             border-color: #4f46e5; /* Indigo-600 for selected bet type */
             background-color: #e0e7ff; /* Indigo-100 */
             box-shadow: 0 0 10px rgba(79, 70, 229, 0.3);
+        }
+        .bet-type-btn {
+            background-color: #ffffff;
+            border: 2px solid #e2e8f0; /* slate-200 */
+            color: #1e293b; /* slate-800 */
+            padding: 0.75rem; /* p-3 */
+            border-radius: 0.5rem; /* rounded-lg */
+            font-weight: 600; /* font-semibold */
+            font-size: 0.875rem; /* text-sm */
+            transition: all 0.3s ease;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1); /* shadow-md */
+            transform: scale(1);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-decoration: none;
+            height: 100%; /* Ensure buttons fill their grid cell height */
+        }
+        .bet-type-btn:hover {
+            border-color: #94a3b8; /* slate-400 */
+            background-color: #f8fafc; /* slate-50 */
+            transform: scale(1.02);
+        }
+
+        .lottery-ball {
+            /* Ensure lottery balls are responsive within their container */
+            flex-shrink: 0; /* Prevent shrinking */
+            width: 15vw; /* Use viewport width for sizing */
+            height: 15vw;
+            max-width: 80px; /* Max size on larger screens */
+            max-height: 80px;
+        }
+        @media (min-width: 768px) { /* md breakpoint */
+            .lottery-ball {
+                width: 80px;
+                height: 80px;
+            }
         }
     </style>
 </head>
@@ -463,48 +542,63 @@
                                 <span class="sm:hidden">Calculator</span>
                             </button> 
                         </div>
-                        <div class="grid grid-cols-3 sm:grid-cols-4 lg:grid-cols-7 gap-3">
+                        <!-- Converted to Bootstrap Grid -->
+                        <div class="row row-cols-3 row-cols-sm-4 row-cols-lg-6 g-3">
                             <!-- Monday Game -->
-                            <button title="Monday Game" type="button" class="game-btn bg-white hover:bg-white text-white w-20 h-20 sm:w-24 sm:h-24 rounded-full font-semibold text-xs transition duration-300 shadow-lg transform hover:scale-105 flex flex-col items-center justify-center space-y-1 border-2 border-transparent" data-game="monday">
-                                <img src="https://placehold.co/80x80/6b7280/ffffff?text=MON" alt="Monday Game" class="rounded-full">
-                                <span class="text-center leading-tight text-black absolute z-10">Monday</span>
-                            </button>
+                            <div class="col">
+                                <button title="Monday Game" type="button" class="game-btn" data-game="monday">
+                                    <img src="https://placehold.co/80x80/6b7280/ffffff?text=MON" alt="Monday Game" class="rounded-full">
+                                    <span class="text-center leading-tight">Monday</span>
+                                </button>
+                            </div>
 
                             <!-- Tuesday Game -->
-                            <button title="Tuesday Game" type="button" class="game-btn bg-white hover:bg-white text-white w-20 h-20 sm:w-24 sm:h-24 rounded-full font-semibold text-xs transition duration-300 shadow-lg transform hover:scale-105 flex flex-col items-center justify-center space-y-1 border-2 border-transparent" data-game="tuesday">
-                                <img src="https://placehold.co/80x80/6b7280/ffffff?text=TUE" alt="Tuesday Game" class="rounded-full">
-                                <span class="text-center leading-tight text-black absolute z-10">Tuesday</span>
-                            </button>
+                            <div class="col">
+                                <button title="Tuesday Game" type="button" class="game-btn" data-game="tuesday">
+                                    <img src="https://placehold.co/80x80/6b7280/ffffff?text=TUE" alt="Tuesday Game" class="rounded-full">
+                                    <span class="text-center leading-tight">Tuesday</span>
+                                </button>
+                            </div>
 
                             <!-- Wednesday Game -->
-                            <button title="Wednesday Game" type="button" class="game-btn bg-white hover:bg-white text-white w-20 h-20 sm:w-24 sm:h-24 rounded-full font-semibold text-xs transition duration-300 shadow-lg transform hover:scale-105 flex flex-col items-center justify-center space-y-1 border-2 border-transparent" data-game="wednesday">
-                                <img src="https://placehold.co/80x80/6b7280/ffffff?text=WED" alt="Wednesday Game" class="rounded-full">
-                                <span class="text-center leading-tight text-black absolute z-10">Wednesday</span>
-                            </button>
+                            <div class="col">
+                                <button title="Wednesday Game" type="button" class="game-btn" data-game="wednesday">
+                                    <img src="https://placehold.co/80x80/6b7280/ffffff?text=WED" alt="Wednesday Game" class="rounded-full">
+                                    <span class="text-center leading-tight">Wednesday</span>
+                                </button>
+                            </div>
 
                             <!-- Thursday Game -->
-                            <button title="Thursday Game" type="button" class="game-btn bg-white hover:bg-white text-white w-20 h-20 sm:w-24 sm:h-24 rounded-full font-semibold text-xs transition duration-300 shadow-lg transform hover:scale-105 flex flex-col items-center justify-center space-y-1 border-2 border-transparent" data-game="thursday">
-                                <img src="https://placehold.co/80x80/6b7280/ffffff?text=THU" alt="Thursday Game" class="rounded-full">
-                                <span class="text-center leading-tight text-black absolute z-10">Thursday</span>
-                            </button>
+                            <div class="col">
+                                <button title="Thursday Game" type="button" class="game-btn" data-game="thursday">
+                                    <img src="https://placehold.co/80x80/6b7280/ffffff?text=THU" alt="Thursday Game" class="rounded-full">
+                                    <span class="text-center leading-tight">Thursday</span>
+                                </button>
+                            </div>
 
                             <!-- Friday Game -->
-                            <button title="Friday Game" type="button" class="game-btn bg-white hover:bg-white text-white w-20 h-20 sm:w-24 sm:h-24 rounded-full font-semibold text-xs transition duration-300 shadow-lg transform hover:scale-105 flex flex-col items-center justify-center space-y-1 border-2 border-transparent" data-game="friday">
-                                <img src="https://placehold.co/80x80/6b7280/ffffff?text=FRI" alt="Friday Game" class="rounded-full">
-                                <span class="text-center leading-tight text-black absolute z-10">Friday</span>
-                            </button>
+                            <div class="col">
+                                <button title="Friday Game" type="button" class="game-btn" data-game="friday">
+                                    <img src="https://placehold.co/80x80/6b7280/ffffff?text=FRI" alt="Friday Game" class="rounded-full">
+                                    <span class="text-center leading-tight">Friday</span>
+                                </button>
+                            </div>
 
                             <!-- Saturday Game -->
-                            <button title="Saturday Game" type="button" class="game-btn bg-white hover:bg-white text-white w-20 h-20 sm:w-24 sm:h-24 rounded-full font-semibold text-xs transition duration-300 shadow-lg transform hover:scale-105 flex flex-col items-center justify-center space-y-1 border-2 border-transparent" data-game="saturday">
-                                <img src="https://placehold.co/80x80/6b7280/ffffff?text=SAT" alt="Saturday Game" class="rounded-full">
-                                <span class="text-center leading-tight text-black absolute z-10">Saturday</span>
-                            </button>
+                            <div class="col">
+                                <button title="Saturday Game" type="button" class="game-btn" data-game="saturday">
+                                    <img src="https://placehold.co/80x80/6b7280/ffffff?text=SAT" alt="Saturday Game" class="rounded-full">
+                                    <span class="text-center leading-tight">Saturday</span>
+                                </button>
+                            </div>
 
                             <!-- Sunday Game -->
-                            <button title="Sunday Game" type="button" class="game-btn bg-white hover:bg-white text-white w-20 h-20 sm:w-24 sm:h-24 rounded-full font-semibold text-xs transition duration-300 shadow-lg transform hover:scale-105 flex flex-col items-center justify-center space-y-1 border-2 border-transparent" data-game="sunday">
-                                <img src="https://placehold.co/80x80/6b7280/ffffff?text=SUN" alt="Sunday Game" class="rounded-full">
-                                <span class="text-center leading-tight text-black absolute z-10">Sunday</span>
-                            </button>
+                            <div class="col">
+                                <button title="Sunday Game" type="button" class="game-btn" data-game="sunday">
+                                    <img src="https://placehold.co/80x80/6b7280/ffffff?text=SUN" alt="Sunday Game" class="rounded-full">
+                                    <span class="text-center leading-tight">Sunday</span>
+                                </button>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -522,39 +616,53 @@
                         </div>
                         
                         <!-- Bet Type Buttons Grid -->
-                        <div class="grid grid-cols-3 sm:grid-cols-4 lg:grid-cols-7 gap-3">
-                            <button type="button" class="bet-type-btn bg-white border-2 border-slate-200 hover:border-slate-400 text-slate-800 p-3 rounded-lg font-semibold text-sm hover:bg-slate-50 transition duration-300 shadow-md transform hover:scale-102 flex flex-col items-center space-y-1" data-bet="direct1">
-                                <div class="w-6 h-6 bg-slate-800 rounded-full flex items-center justify-center text-white font-bold text-xs">1</div>
-                                <span class="text-center text-xs">Direct 1</span>
-                            </button>
-                            <button type="button" class="bet-type-btn bg-white border-2 border-slate-200 hover:border-slate-400 text-slate-800 p-3 rounded-lg font-semibold text-sm hover:bg-slate-50 transition duration-300 shadow-md transform hover:scale-102 flex flex-col items-center space-y-1" data-bet="direct2">
-                                <div class="w-6 h-6 bg-slate-800 rounded-full flex items-center justify-center text-white font-bold text-xs">2</div>
-                                <span class="text-center text-xs">Direct 2</span>
-                            </button>
-                            <button type="button" class="bet-type-btn bg-white border-2 border-slate-200 hover:border-slate-400 text-slate-800 p-3 rounded-lg font-semibold text-sm hover:bg-slate-50 transition duration-300 shadow-md transform hover:scale-102 flex flex-col items-center space-y-1" data-bet="direct3">
-                                <div class="w-6 h-6 bg-slate-800 rounded-full flex items-center justify-center text-white font-bold text-xs">3</div>
-                                <span class="text-center text-xs">Direct 3</span>
-                            </button>
-                            <button type="button" class="bet-type-btn bg-white border-2 border-slate-200 hover:border-slate-400 text-slate-800 p-3 rounded-lg font-semibold text-sm hover:bg-slate-50 transition duration-300 shadow-md transform hover:scale-102 flex flex-col items-center space-y-1" data-bet="perm2">
-                                <div class="w-6 h-6 bg-slate-800 rounded-full flex items-center justify-center text-white font-bold text-xs">P2</div>
-                                <span class="text-center text-xs">Perm 2</span>
-                            </button>
-                            <button type="button" class="bet-type-btn bg-white border-2 border-slate-200 hover:border-slate-400 text-slate-800 p-3 rounded-lg font-semibold text-sm hover:bg-slate-50 transition duration-300 shadow-md transform hover:scale-102 flex flex-col items-center space-y-1" data-bet="perm3">
-                                <div class="w-6 h-6 bg-slate-800 rounded-full flex items-center justify-center text-white font-bold text-xs">P3</div>
-                                <span class="text-center text-xs">Perm 3</span>
-                            </button>
-                            <button type="button" class="bet-type-btn bg-white border-2 border-slate-200 hover:border-slate-400 text-slate-800 p-3 rounded-lg font-semibold text-sm hover:bg-slate-50 transition duration-300 shadow-md transform hover:scale-102 flex flex-col items-center space-y-1" data-bet="banker_all">
-                                <svg class="w-6 h-6 text-slate-800" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
-                                </svg>
-                                <span class="text-center text-xs">Banker All</span>
-                            </button>
-                            <button type="button" class="bet-type-btn bg-white border-2 border-slate-200 hover:border-slate-400 text-slate-800 p-3 rounded-lg font-semibold text-sm hover:bg-slate-50 transition duration-300 shadow-md transform hover:scale-102 flex flex-col items-center space-y-1" data-bet="banker_against">
-                                <svg class="w-6 h-6 text-slate-800" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z"/>
-                                </svg>
-                                <span class="text-center text-xs">Banker Against</span>
-                            </button>
+                        <div class="row row-cols-3 row-cols-sm-4 row-cols-lg-6 g-3">
+                            <div class="col">
+                                <button type="button" class="bet-type-btn" data-bet="direct1">
+                                    <div class="w-6 h-6 bg-slate-800 rounded-full flex items-center justify-center text-white font-bold text-xs">1</div>
+                                    <span class="text-center text-xs">Direct 1</span>
+                                </button>
+                            </div>
+                            <div class="col">
+                                <button type="button" class="bet-type-btn" data-bet="direct2">
+                                    <div class="w-6 h-6 bg-slate-800 rounded-full flex items-center justify-center text-white font-bold text-xs">2</div>
+                                    <span class="text-center text-xs">Direct 2</span>
+                                </button>
+                            </div>
+                            <div class="col">
+                                <button type="button" class="bet-type-btn" data-bet="direct3">
+                                    <div class="w-6 h-6 bg-slate-800 rounded-full flex items-center justify-center text-white font-bold text-xs">3</div>
+                                    <span class="text-center text-xs">Direct 3</span>
+                                </button>
+                            </div>
+                            <div class="col">
+                                <button type="button" class="bet-type-btn" data-bet="perm2">
+                                    <div class="w-6 h-6 bg-slate-800 rounded-full flex items-center justify-center text-white font-bold text-xs">P2</div>
+                                    <span class="text-center text-xs">Perm 2</span>
+                                </button>
+                            </div>
+                            <div class="col">
+                                <button type="button" class="bet-type-btn" data-bet="perm3">
+                                    <div class="w-6 h-6 bg-slate-800 rounded-full flex items-center justify-center text-white font-bold text-xs">P3</div>
+                                    <span class="text-center text-xs">Perm 3</span>
+                                </button>
+                            </div>
+                            <div class="col">
+                                <button type="button" class="bet-type-btn" data-bet="banker_all">
+                                    <svg class="w-6 h-6 text-slate-800" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                                    </svg>
+                                    <span class="text-center text-xs">Banker All</span>
+                                </button>
+                            </div>
+                            <div class="col">
+                                <button type="button" class="bet-type-btn" data-bet="banker_against">
+                                    <svg class="w-6 h-6 text-slate-800" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                                    </svg>
+                                    <span class="text-center text-xs">Banker Against</span>
+                                </button>
+                            </div>
                         </div>                        
                     </div>
                 </div>
@@ -570,60 +678,70 @@
                             </div>
                         </div>
                         
-                        <div class="grid lg:grid-cols-2 gap-6 sm:gap-8 lg:gap-10">
+                        <div class="row row-cols-1 row-cols-lg-2 g-4">
                             <!-- Stake Amount -->
-                            <div class="bg-gray-50 rounded-xl sm:rounded-2xl p-2 sm:p-4 border-2">
-                                <h4 class="text-xl sm:text-2xl font-bold text-gray-800 mb-4 sm:mb-6 flex items-center">
-                                    <span class="text-2xl sm:text-3xl mr-2 sm:mr-3">
-                                        <img src="https://placehold.co/40x40/008000/ffffff?text=₵" alt="Momo Number" class="w-10 h-10">
-                                    </span>
-                                    Your Stake Amount
-                                </h4>
-                                <div class="relative">
-                                    <input type="number" id="takeAmount" name="takeAmount" min="1" max="200" placeholder="Enter amount" class="w-full px-4 sm:px-6 py-3 sm:py-4 border-2  rounded-xl sm:rounded-2xl focus:ring-4  text-lg sm:text-2xl font-bold text-center bg-white shadow-lg">
-                                </div>
-                                <div class="flex justify-between mt-3 sm:mt-4 text-xs sm:text-sm text-gray-600">
-                                    <span>Minimum: ₵1</span>
-                                    <span>Maximum: ₵200</span>
-                                </div>
-                                <div class="grid grid-cols-2 sm:grid-cols-4 gap-2 mt-4 sm:mt-6">
-                                    <button type="button" class="quick-amount bg-gray-200 hover:bg-yellow-200 text-yellow-800 font-semibold py-2 px-3 sm:px-4 rounded-lg sm:rounded-xl transition duration-200 text-sm sm:text-base" data-amount="5">₵5</button>
-                                    <button type="button" class="quick-amount bg-gray-200 hover:bg-yellow-200 text-yellow-800 font-semibold py-2 px-3 sm:px-4 rounded-lg sm:rounded-xl transition duration-200 text-sm sm:text-base" data-amount="10">₵10</button>
-                                    <button type="button" class="quick-amount bg-gray-200 hover:bg-yellow-200 text-yellow-800 font-semibold py-2 px-3 sm:px-4 rounded-lg sm:rounded-xl transition duration-200 text-sm sm:text-base" data-amount="20">₵20</button>
-                                    <button type="button" class="quick-amount bg-gray-200 hover:bg-yellow-200 text-yellow-800 font-semibold py-2 px-3 sm:px-4 rounded-lg sm:rounded-xl transition duration-200 text-sm sm:text-base" data-amount="50">₵50</button>
+                            <div class="col">
+                                <div class="bg-gray-50 rounded-xl sm:rounded-2xl p-2 sm:p-4 border-2 h-100">
+                                    <h4 class="text-xl sm:text-2xl font-bold text-gray-800 mb-4 sm:mb-6 flex items-center">
+                                        <span class="text-2xl sm:text-3xl mr-2 sm:mr-3">
+                                            <img src="https://placehold.co/40x40/008000/ffffff?text=₵" alt="Momo Number" class="w-10 h-10">
+                                        </span>
+                                        Your Stake Amount
+                                    </h4>
+                                    <div class="relative">
+                                        <input type="number" id="takeAmount" name="takeAmount" min="1" max="200" placeholder="Enter amount" class="w-full px-4 sm:px-6 py-3 sm:py-4 border-2  rounded-xl sm:rounded-2xl focus:ring-4  text-lg sm:text-2xl font-bold text-center bg-white shadow-lg">
+                                    </div>
+                                    <div class="flex justify-between mt-3 sm:mt-4 text-xs sm:text-sm text-gray-600">
+                                        <span>Minimum: ₵1</span>
+                                        <span>Maximum: ₵200</span>
+                                    </div>
+                                    <div class="row row-cols-2 row-cols-sm-4 g-2 mt-4 sm:mt-6">
+                                        <div class="col"><button type="button" class="quick-amount bg-gray-200 hover:bg-yellow-200 text-yellow-800 font-semibold py-2 px-3 sm:px-4 rounded-lg sm:rounded-xl transition duration-200 text-sm sm:text-base w-100" data-amount="5">₵5</button></div>
+                                        <div class="col"><button type="button" class="quick-amount bg-gray-200 hover:bg-yellow-200 text-yellow-800 font-semibold py-2 px-3 sm:px-4 rounded-lg sm:rounded-xl transition duration-200 text-sm sm:text-base w-100" data-amount="10">₵10</button></div>
+                                        <div class="col"><button type="button" class="quick-amount bg-gray-200 hover:bg-yellow-200 text-yellow-800 font-semibold py-2 px-3 sm:px-4 rounded-lg sm:rounded-xl transition duration-200 text-sm sm:text-base w-100" data-amount="20">₵20</button></div>
+                                        <div class="col"><button type="button" class="quick-amount bg-gray-200 hover:bg-yellow-200 text-yellow-800 font-semibold py-2 px-3 sm:px-4 rounded-lg sm:rounded-xl transition duration-200 text-sm sm:text-base w-100" data-amount="50">₵50</button></div>
+                                    </div>
                                 </div>
                             </div>
 
                             <!-- Mobile Money Payment -->
-                            <div class="bg-gradient-to-br from-blue-50 to-indigo-50 rounded-xl sm:rounded-2xl p-6 sm:p-8 border border-blue-200">
-                                <h4 class="text-xl sm:text-2xl font-bold text-gray-800 mb-4 sm:mb-6 flex items-center">
-                                    Mobile Money Payment
-                                </h4>
-                                
-                                <!-- Network Selection -->
-                                <div class="grid grid-cols-3 gap-2 sm:gap-3 mb-4 sm:mb-6">
-                                    <label  class="network-option flex flex-col items-center cursor-pointer bg-white rounded-full sm:rounded-full p-3 sm:p-4 hover:bg-yellow-50 transition duration-200 border-2 border-transparent hover:border-yellow-300 group">
-                                        <input type="radio" name="network" value="mtn" class="sr-only">
-                                        <div  class="w-15 h-15 sm:w-15 sm:h-15 bg-yellow-200 rounded-full sm:rounded-full flex items-center justify-center group-hover:scale-110 transition-transform">
-                                            <img src="https://placehold.co/60x60/FFD700/000000?text=MTN" alt="MTN MOMO" class="rounded-full sm:rounded-full">
+                            <div class="col">
+                                <div class="bg-gradient-to-br from-blue-50 to-indigo-50 rounded-xl sm:rounded-2xl p-6 sm:p-8 border border-blue-200 h-100">
+                                    <h4 class="text-xl sm:text-2xl font-bold text-gray-800 mb-4 sm:mb-6 flex items-center">
+                                        Mobile Money Payment
+                                    </h4>
+                                    
+                                    <!-- Network Selection -->
+                                    <div class="row row-cols-3 g-2 mb-4 sm:mb-6">
+                                        <div class="col">
+                                            <label class="network-option flex flex-col items-center cursor-pointer group">
+                                                <input type="radio" name="network" value="mtn" class="sr-only">
+                                                <div class="bg-yellow-200 rounded-full flex items-center justify-center group-hover:scale-110 transition-transform">
+                                                    <img src="https://placehold.co/60x60/FFD700/000000?text=MTN" alt="MTN MOMO" class="rounded-full">
+                                                </div>
+                                            </label>
                                         </div>
-                                    </label>
-                                    <label class="network-option flex flex-col items-center cursor-pointer bg-white rounded-full sm:rounded-full p-3 sm:p-4 hover:bg-red-50 transition duration-200 border-2 border-transparent hover:border-red-300 group">
-                                        <input type="radio" name="network" value="telecel" class="sr-only">
-                                        <div class="w-15 h-15 sm:w-15 sm:h-15 bg-red-200 rounded-full sm:rounded-full flex items-center justify-center group-hover:scale-110 transition-transform">
-                                            <img src="https://placehold.co/60x60/DC143C/ffffff?text=VOD" alt="Telecel" class="rounded-full sm:rounded-full">
+                                        <div class="col">
+                                            <label class="network-option flex flex-col items-center cursor-pointer group">
+                                                <input type="radio" name="network" value="telecel" class="sr-only">
+                                                <div class="bg-red-200 rounded-full flex items-center justify-center group-hover:scale-110 transition-transform">
+                                                    <img src="https://placehold.co/60x60/DC143C/ffffff?text=VOD" alt="Telecel" class="rounded-full">
+                                                </div>
+                                            </label>
                                         </div>
-                                    </label>
-                                    <label class="network-option flex flex-col items-center cursor-pointer bg-white rounded-full sm:rounded-full p-3 sm:p-4 hover:bg-blue-50 transition duration-200 border-2 border-transparent hover:border-blue-300 group">
-                                        <input type="radio" name="network" value="tigo" class="sr-only">
-                                        <div class="w-15 h-15 sm:w-15 sm:h-15 bg-blue-200 rounded-full sm:rounded-full flex items-center justify-center group-hover:scale-110 transition-transform">
-                                            <img src="https://placehold.co/60x60/1E90FF/ffffff?text=AIR" alt="airtel Tigo" class="rounded-full sm:rounded-full">
+                                        <div class="col">
+                                            <label class="network-option flex flex-col items-center cursor-pointer group">
+                                                <input type="radio" name="network" value="tigo" class="sr-only">
+                                                <div class="bg-blue-200 rounded-full flex items-center justify-center group-hover:scale-110 transition-transform">
+                                                    <img src="https://placehold.co/60x60/1E90FF/ffffff?text=AIR" alt="airtel Tigo" class="rounded-full">
+                                                </div>
+                                            </label>
                                         </div>
-                                    </label>
+                                    </div>
+                                    
+                                    <!-- Phone Number -->
+                                    <input type="tel" id="momoNumber" name="momoNumber" placeholder="0XX XXX XXXX" class="w-full px-4 sm:px-6 py-3 sm:py-4 border-2 border-blue-300 rounded-xl sm:rounded-2xl focus:ring-4 focus:ring-blue-200 focus:border-blue-500 text-lg sm:text-xl font-semibold text-center bg-white shadow-lg">
                                 </div>
-                                
-                                <!-- Phone Number -->
-                                <input type="tel" id="momoNumber" name="momoNumber" placeholder="0XX XXX XXXX" class="w-full px-4 sm:px-6 py-3 sm:py-4 border-2 border-blue-300 rounded-xl sm:rounded-2xl focus:ring-4 focus:ring-blue-200 focus:border-blue-500 text-lg sm:text-xl font-semibold text-center bg-white shadow-lg">
                             </div>
                         </div>
                     </div>
@@ -655,7 +773,7 @@
                             <div class="text-center mb-6">
                                 <h5 class="text-xl font-bold text-gray-700 mb-2">Choose from 1 to 90</h5>
                             </div>
-                            <div class="grid grid-cols-6 sm:grid-cols-8 md:grid-cols-9 lg:grid-cols-10 gap-2 sm:gap-3 max-w-5xl mx-auto" id="numberGrid">
+                            <div class="row row-cols-6 row-cols-sm-8 row-cols-md-9 row-cols-lg-10 g-2 max-w-5xl mx-auto" id="numberGrid">
                                 <!-- Numbers 1-90 will be generated by JavaScript -->
                             </div>
                         </div>
@@ -697,12 +815,12 @@
                                 Noon Rush
                             </h3>
                         </div>
-                        <div class="flex items-center space-x-4">
-                            <div class="w-20 h-20 bg-gradient-to-br from-yellow-400 to-yellow-600 rounded-full flex items-center justify-center text-white font-bold text-2xl shadow-2xl lottery-ball">12</div>
-                            <div class="w-20 h-20 bg-gradient-to-br from-yellow-400 to-yellow-600 rounded-full flex items-center justify-center text-white font-bold text-2xl shadow-2xl lottery-ball" style="animation-delay: 0.1s;">34</div>
-                            <div class="w-20 h-20 bg-gradient-to-br from-yellow-400 to-yellow-600 rounded-full flex items-center justify-center text-white font-bold text-2xl shadow-2xl lottery-ball" style="animation-delay: 0.2s;">56</div>
-                            <div class="w-20 h-20 bg-gradient-to-br from-yellow-400 to-yellow-600 rounded-full flex items-center justify-center text-white font-bold text-2xl shadow-2xl lottery-ball" style="animation-delay: 0.3s;">78</div>
-                            <div class="w-20 h-20 bg-gradient-to-br from-yellow-400 to-yellow-600 rounded-full flex items-center justify-center text-white font-bold text-2xl shadow-2xl lottery-ball" style="animation-delay: 0.4s;">90</div>
+                        <div class="flex items-center space-x-4 flex-wrap justify-center">
+                            <div class="bg-gradient-to-br from-yellow-400 to-yellow-600 rounded-full flex items-center justify-center text-white font-bold text-2xl shadow-2xl lottery-ball">12</div>
+                            <div class="bg-gradient-to-br from-yellow-400 to-yellow-600 rounded-full flex items-center justify-center text-white font-bold text-2xl shadow-2xl lottery-ball" style="animation-delay: 0.1s;">34</div>
+                            <div class="bg-gradient-to-br from-yellow-400 to-yellow-600 rounded-full flex items-center justify-center text-white font-bold text-2xl shadow-2xl lottery-ball" style="animation-delay: 0.2s;">56</div>
+                            <div class="bg-gradient-to-br from-yellow-400 to-yellow-600 rounded-full flex items-center justify-center text-white font-bold text-2xl shadow-2xl lottery-ball" style="animation-delay: 0.3s;">78</div>
+                            <div class="bg-gradient-to-br from-yellow-400 to-yellow-600 rounded-full flex items-center justify-center text-white font-bold text-2xl shadow-2xl lottery-ball" style="animation-delay: 0.4s;">90</div>
                         </div>
                     </div>
                 </div>
@@ -959,6 +1077,9 @@
 
         // Generate number buttons (1 to 90)
         for (let i = 1; i <= 90; i++) {
+            const colDiv = document.createElement('div');
+            colDiv.classList.add('col'); // Add Bootstrap column class
+            
             const button = document.createElement('div');
             button.classList.add('number-button');
             button.textContent = i;
@@ -983,7 +1104,8 @@
                 }
                 updateSelectedNumbersDisplay();
             });
-            numberGrid.appendChild(button);
+            colDiv.appendChild(button); // Append button to the column div
+            numberGrid.appendChild(colDiv); // Append column div to the grid
         }
 
         // Update the display of selected numbers
@@ -1048,7 +1170,9 @@
         networkOptions.forEach(label => {
             const radio = label.querySelector('input[type="radio"]');
             label.addEventListener('click', () => {
+                // Remove border from all network options' inner divs
                 networkOptions.forEach(opt => opt.querySelector('div').style.borderColor = 'transparent');
+                // Add border to the clicked option's inner div
                 label.querySelector('div').style.borderColor = '#007bff'; // Bootstrap primary blue
                 radio.checked = true;
             });
