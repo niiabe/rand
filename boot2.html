@@ -1,0 +1,617 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lotto Number Selector</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Display&display=swap" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <style>
+        body {
+            background-color: #f8f9fa; /* Light background */
+            font-family: Arial, sans-serif;
+        }
+        /* Hero Section Styling */
+        .hero-section {
+            position: relative;
+            min-height: 100vh;
+            overflow: hidden; /* To contain the video */
+            color: white;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-start;
+            padding-bottom: 20px;
+        }
+        .hero-video {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            min-width: 100%;
+            min-height: 100%;
+            width: auto;
+            height: auto;
+            transform: translateX(-50%) translateY(-50%);
+            z-index: -1; /* Place behind other content */
+            object-fit: cover;
+        }
+        .video-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5); /* Semi-transparent black overlay */
+        }
+        .hero-content {
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            padding-top: 60px; /* Add padding to account for the navbar */
+        }
+        .hero-title {
+            font-size: 3.5rem;
+            font-weight: bold;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+            font-family: 'DM Display', sans-serif; /* DM Display font applied */
+        }
+        .hero-subtitle {
+            font-size: 1.5rem;
+            max-width: 600px;
+            margin-top: 10px;
+        }
+        .navbar-brand {
+            font-weight: bold;
+            font-size: 1.5rem;
+        }
+        .navbar-nav .nav-link {
+            color: rgba(255, 255, 255, 0.8) !important;
+        }
+        .navbar-nav .nav-link:hover {
+            color: rgba(255, 255, 255, 1) !important;
+        }
+
+        /* Main Wrapper Container for Lotto section */
+        .lotto-wrapper {
+            background-color: #f8f9fa; /* Match body background */
+            padding-top: 50px;
+            padding-bottom: 50px;
+        }
+        /* Lotto Container Styling */
+        .lotto-container {
+            max-width: 960px; /* Bigger container */
+            margin: 0 auto;
+            background-color: #ffffff;
+            border-radius: 10px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            padding: 30px;
+        }
+        .lotto-container h2 {
+            font-family: 'DM Display', sans-serif; /* DM Display font applied */
+        }
+        .number-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(50px, 1fr));
+            gap: 10px;
+            padding: 20px 0;
+        }
+        .number-button {
+            width: 50px;
+            height: 50px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+            font-weight: bold;
+            border-radius: 50%;
+            border: 2px solid #007bff;
+            background-color: #ffffff;
+            color: #007bff;
+            cursor: pointer;
+            transition: all 0.2s ease-in-out;
+            user-select: none;
+        }
+        .number-button:hover {
+            background-color: #e9ecef;
+            transform: scale(1.05);
+        }
+        .number-button.selected {
+            background-color: #007bff;
+            color: #ffffff;
+            border-color: #0056b3;
+            transform: scale(1.1);
+            box-shadow: 0 0 10px rgba(0, 123, 255, 0.5);
+        }
+        /* Selected Numbers Display Styling */
+        .selected-numbers-container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        .selected-numbers-display {
+            min-height: 60px;
+            border: 1px dashed #ced4da;
+            border-radius: 8px;
+            padding: 15px;
+            background-color: #e9ecef;
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+        /* Circular badges for selected numbers */
+        .selected-number-badge {
+            width: 50px;
+            height: 50px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+            font-weight: bold;
+            border-radius: 50%;
+            background-color: #007bff; /* Use the same color as selected buttons */
+            color: #ffffff;
+            border: 2px solid #0056b3;
+        }
+        .no-selection-text {
+            font-size: 1rem;
+            color: #6c757d;
+        }
+        .action-buttons {
+            margin-top: 20px;
+            text-align: center;
+        }
+        /* Custom modal styles for alerts (No changes here) */
+        .custom-modal {
+            display: none;
+            position: fixed;
+            z-index: 1050;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgba(0,0,0,0.4);
+            justify-content: center;
+            align-items: center;
+        }
+        .custom-modal-content {
+            background-color: #fefefe;
+            margin: auto;
+            padding: 20px;
+            border: 1px solid #888;
+            width: 80%;
+            max-width: 400px;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+            text-align: center;
+        }
+        .custom-modal-header {
+            padding: 10px 0;
+            border-bottom: 1px solid #e9ecef;
+            margin-bottom: 15px;
+        }
+        .custom-modal-header h5 {
+            margin-bottom: 0;
+            font-size: 1.25rem;
+            font-weight: bold;
+            font-family: 'DM Display', sans-serif; /* DM Display font applied */
+        }
+        .custom-modal-body {
+            padding: 10px 0;
+            font-size: 1rem;
+            color: #333;
+        }
+        .custom-modal-footer {
+            padding: 10px 0;
+            border-top: 1px solid #e9ecef;
+            margin-top: 15px;
+            display: flex;
+            justify-content: center;
+        }
+        .close-modal-btn {
+            background-color: #007bff;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.2s;
+        }
+        .close-modal-btn:hover {
+            background-color: #0056b3;
+        }
+
+        /* Custom responsive font sizes and DM Display font */
+        .heading-responsive-text {
+            font-size: 2.5rem; /* text-3xl */
+            font-family: 'DM Display', sans-serif; /* DM Display font applied */
+        }
+        @media (min-width: 576px) { /* sm breakpoint */
+            .heading-responsive-text {
+                font-size: 3rem; /* sm:text-4xl */
+            }
+            .custom-mb-sm-6 {
+                margin-bottom: 1.5rem !important; /* sm:mb-6 */
+            }
+        }
+        @media (min-width: 768px) { /* md breakpoint */
+            .heading-responsive-text {
+                font-size: 4rem; /* md:text-5xl */
+            }
+        }
+        @media (min-width: 992px) { /* lg breakpoint */
+            .heading-responsive-text {
+                font-size: 5rem; /* lg:text-6xl */
+            }
+        }
+
+        .paragraph-responsive-text {
+            font-size: 1.125rem; /* text-lg */
+        }
+        @media (min-width: 576px) { /* sm breakpoint */
+            .paragraph-responsive-text {
+                font-size: 1.25rem; /* sm:text-xl */
+            }
+        }
+
+        /* Custom spacing for p-10, mb-10, mt-10 */
+        .custom-p-10 {
+            padding: 2.5rem !important; /* ~40px */
+        }
+        .custom-my-10 {
+            margin-top: 2.5rem !important;
+            margin-bottom: 2.5rem !important;
+        }
+
+        /* Custom margin-bottom for mb-12, mb-16, mb-20 */
+        .custom-mb-12 {
+            margin-bottom: 3rem !important; /* ~48px */
+        }
+        @media (min-width: 576px) { /* sm breakpoint */
+            .custom-mb-sm-16 {
+                margin-bottom: 4rem !important; /* ~64px */
+            }
+        }
+        @media (min-width: 992px) { /* lg breakpoint */
+            .custom-mb-lg-20 {
+                margin-bottom: 5rem !important; /* ~80px */
+            }
+        }
+
+        /* Custom gray color */
+        .text-custom-gray-600 {
+            color: #4b5563; /* A common gray-600 equivalent */
+        }
+        .text-custom-yellow {
+            color: #b97a06;
+        }
+
+        /* Custom max-width */
+        .max-w-2xl {
+            max-width: 42rem; /* Equivalent to Tailwind's max-w-2xl (672px) */
+        }
+
+        /* New custom styles for the stake and payment section */
+        .custom-border-2 {
+            border-width: 2px !important;
+        }
+        .custom-gradient-border-inner {
+            background-color: #fff;
+            border-radius: 1rem;
+            position: relative;
+        }
+        .custom-gradient-border-inner::before {
+            content: '';
+            position: absolute;
+            inset: -2px;
+            z-index: -1;
+            border-radius: inherit;
+            background: linear-gradient(to right, #f6e05e, #f97316);
+            padding: 2px;
+            -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+            mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+            -webkit-mask-composite: xor;
+            mask-composite: exclude;
+        }
+        .custom-w-h-14 {
+            width: 3.5rem;
+            height: 3.5rem;
+        }
+        .custom-rounded-2xl {
+            border-radius: 1rem;
+        }
+        .custom-bg-gradient-yellow-orange {
+            background-image: linear-gradient(to right, #f6e05e, #f97316);
+        }
+        .custom-h3 {
+             font-family: 'DM Display', sans-serif;
+             font-size: 1.75rem; /* Equivalent to text-3xl */
+        }
+        @media (min-width: 576px) {
+            .custom-h3 {
+                font-size: 2.25rem; /* Equivalent to sm:text-4xl */
+            }
+        }
+        .custom-rounded-full {
+            border-radius: 9999px;
+        }
+        .network-option:hover {
+            border-color: #f6ad55;
+        }
+        .custom-hover-bg-yellow-200:hover {
+             background-color: #fefcbf;
+        }
+        .custom-text-yellow-800 {
+             color: #975a16;
+        }
+
+    </style>
+</head>
+<body>
+
+    <div class="hero-section">
+        <video class="hero-video" autoplay loop muted>
+            <source src="resources/Img/motion.mp4" type="video/mp4">
+            Your browser does not support the video tag.
+        </video>
+        <div class="video-overlay"></div>
+        <nav class="navbar navbar-expand navbar-dark bg-transparent">
+            <div class="container-fluid">
+                <a class="navbar-brand" href="#">Lotto</a>
+                <div class="collapse navbar-collapse" id="navbarNav">
+                    <ul class="navbar-nav ms-auto">
+                        <li class="nav-item">
+                            <a class="nav-link active" aria-current="page" href="#">Home</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#">How to Play</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#">Prizes</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#">Contact</a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </nav>
+
+        <div class="hero-content">
+            <h1 class="hero-title">Your Fortune Awaits</h1>
+            <p class="hero-subtitle">Select your lucky numbers and take a chance at winning big! Every number could be the one.</p>
+        </div>
+    </div>
+
+    <div class="lotto-wrapper">
+        <div class="container mx-auto bg-white px-4 position-relative shadow custom-p-10 custom-my-10">
+            <div class="text-center custom-mb-12 custom-mb-sm-16 custom-mb-lg-20">
+                <h2 class="heading-responsive-text fw-bolder mb-4 custom-mb-sm-6" style="color: rgb(12, 10, 96);">
+                    Play & Win Today
+                </h2>
+                <p class="paragraph-responsive-text text-custom-gray-600 max-w-2xl mx-auto px-4">Choose your lucky numbers and join thousands of winners. Your fortune is just one click away!</p>
+            </div>
+
+            <div class="border custom-border-2 custom-mb-12 shadow">
+                <div class="custom-gradient-border-inner custom-p-10">
+                    <div class="d-flex align-items-center mb-4">
+                        <div class="custom-w-h-14 custom-bg-gradient-yellow-orange custom-rounded-2xl d-flex align-items-center justify-content-center text-white fw-bold fs-4 me-4 shadow-lg">3</div>
+                        <div class="d-none d-sm-block">
+                            <h3 class="custom-h3 fw-bold text-dark mb-1">Set Your Stake & Payment</h3>
+                            <p class="text-secondary">Choose your bet amount and payment method</p>
+                        </div>
+                    </div>
+                    
+                    <div class="row g-4 g-sm-5 g-lg-6">
+                        <div class="col-lg-6">
+                            <div class="bg-light rounded-3 p-2 p-sm-4 custom-border-2">
+                                <h4 class="fs-5 fs-sm-4 fw-bold text-dark mb-4 mb-sm-6 d-flex align-items-center">
+                                    <span class="fs-4 fs-sm-3 me-2 me-sm-3">
+                                        <img src="resources/Img/cedi.png" alt="Momo Number" class="custom-w-h-14">
+                                    </span>
+                                    Your Stake Amount
+                                </h4>
+                                <div class="position-relative">
+                                    <input type="number" id="takeAmount" name="takeAmount" min="1" max="200" placeholder="Enter amount" class="form-control w-100 px-4 px-sm-6 py-3 py-sm-4 custom-border-2 rounded-3 text-lg text-sm-2xl fw-bold text-center bg-white shadow-lg">
+                                </div>
+                                <div class="d-flex justify-content-between mt-3 mt-sm-4 small text-secondary">
+                                    <span>Minimum: ₵1</span>
+                                    <span>Maximum: ₵200</span>
+                                </div>
+                                <div class="row g-2 mt-4 mt-sm-6">
+                                    <div class="col-6 col-sm-3">
+                                        <button type="button" class="btn btn-light w-100 custom-hover-bg-yellow-200 custom-text-yellow-800 fw-semibold py-2 px-3 custom-rounded-lg transition" data-amount="5">₵5</button>
+                                    </div>
+                                    <div class="col-6 col-sm-3">
+                                        <button type="button" class="btn btn-light w-100 custom-hover-bg-yellow-200 custom-text-yellow-800 fw-semibold py-2 px-3 custom-rounded-lg transition" data-amount="10">₵10</button>
+                                    </div>
+                                    <div class="col-6 col-sm-3">
+                                        <button type="button" class="btn btn-light w-100 custom-hover-bg-yellow-200 custom-text-yellow-800 fw-semibold py-2 px-3 custom-rounded-lg transition" data-amount="20">₵20</button>
+                                    </div>
+                                    <div class="col-6 col-sm-3">
+                                        <button type="button" class="btn btn-light w-100 custom-hover-bg-yellow-200 custom-text-yellow-800 fw-semibold py-2 px-3 custom-rounded-lg transition" data-amount="50">₵50</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-lg-6">
+                            <div class="bg-light rounded-3 p-2 p-sm-4 border border-info">
+                                <h4 class="fs-5 fs-sm-4 fw-bold text-dark mb-4 mb-sm-6 d-flex align-items-center">
+                                    Mobile Money Payment
+                                </h4>
+                                
+                                <div class="row g-2 g-sm-3 mb-4 mb-sm-6">
+                                    <div class="col-4">
+                                        <label class="network-option d-flex flex-column align-items-center text-center cursor-pointer bg-white rounded-3 p-3 p-sm-4 hover-bg-yellow-50 transition border custom-border-2 border-transparent">
+                                            <input type="radio" name="network" value="mtn" class="d-none">
+                                            <div class="custom-w-h-14 bg-warning rounded-3 d-flex align-items-center justify-content-center">
+                                                <img src="resources/Img/mtn.png" alt="MTN MOMO" class="w-100 h-100 rounded-3">
+                                            </div>
+                                        </label>
+                                    </div>
+                                    <div class="col-4">
+                                        <label class="network-option d-flex flex-column align-items-center text-center cursor-pointer bg-white rounded-3 p-3 p-sm-4 hover-bg-red-50 transition border custom-border-2 border-transparent">
+                                            <input type="radio" name="network" value="telecel" class="d-none">
+                                            <div class="custom-w-h-14 bg-danger rounded-3 d-flex align-items-center justify-content-center">
+                                                <img src="resources/Img/voda.png" alt="Telecel" class="w-100 h-100 rounded-3">
+                                            </div>
+                                        </label>
+                                    </div>
+                                    <div class="col-4">
+                                        <label class="network-option d-flex flex-column align-items-center text-center cursor-pointer bg-white rounded-3 p-3 p-sm-4 hover-bg-blue-50 transition border custom-border-2 border-transparent">
+                                            <input type="radio" name="network" value="tigo" class="d-none">
+                                            <div class="custom-w-h-14 bg-primary rounded-3 d-flex align-items-center justify-content-center">
+                                                <img src="resources/Img/airtel.png" alt="Airtel Tigo" class="w-100 h-100 rounded-3">
+                                            </div>
+                                        </label>
+                                    </div>
+                                </div>
+                                
+                                <input type="tel" id="momoNumber" name="momoNumber" placeholder="0XX XXX XXXX" class="form-control w-100 px-4 px-sm-6 py-3 py-sm-4 custom-border-2 border-info rounded-3 text-lg text-sm-xl fw-semibold text-center bg-white shadow-lg">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="lotto-container"> 
+                <h2 class="text-center mb-4">Pick Your Lucky Numbers! 🍀</h2>
+                <p class="text-center text-muted mb-4">Select up to 6 numbers from 1 to 90.</p>
+
+                <div class="selected-numbers-container">
+                    <div id="selectedNumbersOutput" class="selected-numbers-display">
+                        <span class="no-selection-text">No numbers selected yet.</span>
+                    </div>
+                </div>
+
+                <div id="numberGrid" class="number-grid">
+                    </div>
+
+                <div class="action-buttons">
+                    <button id="clearSelection" class="btn btn-secondary me-2">Clear Selection</button>
+                    <button id="playNow" class="btn btn-primary">Play Now!</button>
+                </div>
+            </div>
+
+        </div>
+        
+    </div>
+
+    <div id="customModal" class="custom-modal">
+        <div class="custom-modal-content">
+            <div class="custom-modal-header">
+                <h5 id="modalTitle"></h5>
+            </div>
+            <div class="custom-modal-body">
+                <p id="modalMessage"></p>
+            </div>
+            <div class="custom-modal-footer">
+                <button type="button" class="close-modal-btn">OK</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+    <script>
+        const numberGrid = document.getElementById('numberGrid');
+        const selectedNumbersOutput = document.getElementById('selectedNumbersOutput');
+        const clearSelectionButton = document.getElementById('clearSelection');
+        const playNowButton = document.getElementById('playNow');
+
+        const customModal = document.getElementById('customModal');
+        const modalTitle = document.getElementById('modalTitle');
+        const modalMessage = document.getElementById('modalMessage');
+        const closeModalBtn = customModal.querySelector('.close-modal-btn');
+
+        let selectedNumbers = [];
+
+        // Function to show custom modal
+        function showCustomModal(title, message) {
+            modalTitle.textContent = title;
+            modalMessage.textContent = message;
+            customModal.style.display = 'flex'; // Use flex to center
+        }
+
+        // Function to hide custom modal
+        function hideCustomModal() {
+            customModal.style.display = 'none';
+        }
+
+        // Event listener for closing the modal
+        closeModalBtn.addEventListener('click', hideCustomModal);
+
+        // Generate number buttons (1 to 90)
+        for (let i = 1; i <= 90; i++) {
+            const button = document.createElement('div');
+            button.classList.add('number-button');
+            button.textContent = i;
+            button.dataset.number = i; // Store the number as a data attribute
+
+            button.addEventListener('click', () => {
+                const number = parseInt(button.dataset.number);
+                const index = selectedNumbers.indexOf(number);
+
+                if (index === -1) {
+                    // Number not selected, add it
+                    selectedNumbers.push(number);
+                    button.classList.add('selected');
+                } else {
+                    // Number already selected, remove it
+                    selectedNumbers.splice(index, 1);
+                    button.classList.remove('selected');
+                }
+                updateSelectedNumbersDisplay();
+            });
+            numberGrid.appendChild(button);
+        }
+
+        // Update the display of selected numbers
+        function updateSelectedNumbersDisplay() {
+            if (selectedNumbers.length === 0) {
+                selectedNumbersOutput.innerHTML = '<span class="no-selection-text">No numbers selected yet.</span>';
+            } else {
+                // Sort numbers for better readability
+                const sortedNumbers = [...selectedNumbers].sort((a, b) => a - b);
+                selectedNumbersOutput.innerHTML = sortedNumbers.map(num =>
+                    `<div class="selected-number-badge">${num}</div>`
+                ).join('');
+            }
+        }
+
+        // Clear all selected numbers
+        clearSelectionButton.addEventListener('click', () => {
+            selectedNumbers.forEach(num => {
+                const button = document.querySelector(`.number-button[data-number="${num}"]`);
+                if (button) {
+                    button.classList.remove('selected');
+                }
+            });
+            selectedNumbers = [];
+            updateSelectedNumbersDisplay();
+            showCustomModal('Selection Cleared', 'All your selected numbers have been cleared.');
+        });
+
+        // Handle Play Now button click
+        playNowButton.addEventListener('click', () => {
+            if (selectedNumbers.length === 0) {
+                showCustomModal('No Numbers Selected', 'Please select at least one number to play.');
+            } else {
+                const sortedNumbers = [...selectedNumbers].sort((a, b) => a - b);
+                showCustomModal('Ready to Play!', `You have selected: ${sortedNumbers.join(', ')}. Good luck!`);
+                // Here you would typically send the selected numbers to a backend
+                console.log('Numbers submitted:', sortedNumbers);
+            }
+        });
+
+        // Initial display update
+        updateSelectedNumbersDisplay();
+    </script>
+</body>
+</html>
