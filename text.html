@@ -1,0 +1,967 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lotto Number Selector</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Display&display=swap" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <style>
+        body {
+            background-color: #f8f9fa; /* Light background */
+            font-family: Arial, sans-serif;
+        }
+
+        /* Hero Section Styling */
+        .hero-section {
+            position: relative;
+            min-height: 100vh;
+            overflow: hidden; /* To contain the video */
+            color: white;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-start;
+            padding-bottom: 20px;
+        }
+        .hero-video {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            min-width: 100%;
+            min-height: 100%;
+            width: auto;
+            height: auto;
+            transform: translateX(-50%) translateY(-50%);
+            z-index: -1; /* Place behind other content */
+            object-fit: cover;
+        }
+        .video-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5); /* Semi-transparent black overlay */
+        }
+        .hero-content {
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            padding-top: 60px; /* Add padding to account for the navbar */
+        }
+        .hero-title {
+            font-size: 3.5rem;
+            font-weight: bold;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+            font-family: 'DM Display', sans-serif; /* DM Display font applied */
+        }
+        .hero-subtitle {
+            font-size: 1.5rem;
+            max-width: 600px;
+            margin-top: 10px;
+        }
+        .navbar-brand {
+            font-weight: bold;
+            font-size: 1.5rem;
+        }
+        .navbar-nav .nav-link {
+            color: rgba(255, 255, 255, 0.8) !important;
+        }
+        .navbar-nav .nav-link:hover {
+            color: rgba(255, 255, 255, 1) !important;
+        }
+
+        /* Main Wrapper Container for Lotto section */
+        .lotto-wrapper {
+            background-color: #f8f9fa; /* Match body background */
+            padding-top: 50px;
+            padding-bottom: 50px;
+        }
+        /* Unified Content Container */
+        .lotto-content-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background-color: #ffffff;
+            border-radius: 10px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            padding: 30px;
+        }
+        
+        .lotto-container h2 {
+            font-family: 'DM Display', sans-serif; /* DM Display font applied */
+        }
+        .number-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(50px, 1fr));
+            gap: 10px;
+            padding: 20px 0;
+        }
+        .number-button {
+            width: 50px;
+            height: 50px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+            font-weight: bold;
+            border-radius: 50%;
+            border: 2px solid #007bff;
+            background-color: #ffffff;
+            color: #007bff;
+            cursor: pointer;
+            transition: all 0.2s ease-in-out;
+            user-select: none;
+        }
+        .number-button:hover {
+            background-color: #e9ecef;
+            transform: scale(1.05);
+        }
+        .number-button.selected {
+            background-color: #007bff;
+            color: #ffffff;
+            border-color: #0056b3;
+            transform: scale(1.1);
+            box-shadow: 0 0 10px rgba(0, 123, 255, 0.5);
+        }
+        /* Selected Numbers Display Styling */
+        .selected-numbers-container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        .selected-numbers-display {
+            min-height: 60px;
+            border: 1px dashed #ced4da;
+            border-radius: 8px;
+            padding: 15px;
+            background-color: #e9ecef;
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+        /* Circular badges for selected numbers */
+        .selected-number-badge {
+            width: 50px;
+            height: 50px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+            font-weight: bold;
+            border-radius: 50%;
+            background-color: #007bff; /* Use the same color as selected buttons */
+            color: #ffffff;
+            border: 2px solid #0056b3;
+        }
+        .no-selection-text {
+            font-size: 1rem;
+            color: #6c757d;
+        }
+        .action-buttons {
+            margin-top: 20px;
+            text-align: center;
+        }
+        /* Custom modal styles for alerts */
+        .custom-modal {
+            display: none;
+            position: fixed;
+            z-index: 1050;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgba(0,0,0,0.4);
+            justify-content: center;
+            align-items: center;
+        }
+        .custom-modal-content {
+            background-color: #fefefe;
+            margin: auto;
+            padding: 20px;
+            border: 1px solid #888;
+            width: 80%;
+            max-width: 400px;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+            text-align: center;
+        }
+        .custom-modal-header {
+            padding: 10px 0;
+            border-bottom: 1px solid #e9ecef;
+            margin-bottom: 15px;
+        }
+        .custom-modal-header h5 {
+            margin-bottom: 0;
+            font-size: 1.25rem;
+            font-weight: bold;
+            font-family: 'DM Display', sans-serif; /* DM Display font applied */
+        }
+        .custom-modal-body {
+            padding: 10px 0;
+            font-size: 1rem;
+            color: #333;
+        }
+        .custom-modal-footer {
+            padding: 10px 0;
+            border-top: 1px solid #e9ecef;
+            margin-top: 15px;
+            display: flex;
+            justify-content: center;
+        }
+        .close-modal-btn {
+            background-color: #007bff;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.2s;
+        }
+        .close-modal-btn:hover {
+            background-color: #0056b3;
+        }
+        
+        .heading-responsive-text {
+            font-size: 2.5rem;
+            font-family: 'DM Display', sans-serif;
+        }
+        @media (min-width: 576px) {
+            .heading-responsive-text {
+                font-size: 3rem;
+            }
+            .custom-mb-sm-6 {
+                margin-bottom: 1.5rem !important;
+            }
+        }
+        @media (min-width: 768px) {
+            .heading-responsive-text {
+                font-size: 4rem;
+            }
+        }
+        @media (min-width: 992px) {
+            .heading-responsive-text {
+                font-size: 5rem;
+            }
+        }
+
+        .paragraph-responsive-text {
+            font-size: 1.125rem;
+        }
+        @media (min-width: 576px) {
+            .paragraph-responsive-text {
+                font-size: 1.25rem;
+            }
+        }
+
+        .text-custom-gray-600 {
+            color: #4b5563;
+        }
+        .serif-font {
+            font-family: 'DM Display', sans-serif;
+        }
+        
+        /* Game day buttons */
+        .game-btn {
+            width: 6rem;
+            height: 6rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            transition: all 0.3s ease-in-out;
+            cursor: pointer;
+            background-color: #fff;
+            border: 2px solid transparent;
+            padding: 0.5rem;
+            flex-shrink: 0;
+        }
+        .game-btn.active {
+            border-color: #3b82f6; /* Use a blue color for active state */
+            box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.5);
+            transform: scale(1.05);
+        }
+        .game-btn:hover {
+            transform: scale(1.05);
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+        }
+        .game-btn-img {
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            object-fit: cover;
+        }
+
+        /* Bet type buttons */
+        .bet-type-btn {
+            transition: all 0.3s ease-in-out;
+            cursor: pointer;
+        }
+        .bet-type-btn.active {
+            background-color: #e0f2fe; /* light blue background */
+            border-color: #007bff; /* blue border */
+            box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.25); /* blue shadow */
+            transform: scale(1.05); /* slightly bigger */
+        }
+        .bet-type-btn:hover {
+            background-color: #f8fafc;
+            transform: scale(1.02);
+        }
+
+        /* Network options */
+        .network-option-label {
+            cursor: pointer;
+            border-radius: 50%;
+            border: 2px solid transparent;
+            transition: all 0.3s ease-in-out;
+        }
+        .network-option-label:hover {
+            border-color: #f59e0b; /* yellow-500 */
+        }
+        .network-option-label.active {
+            border-color: #f59e0b; /* yellow-500 */
+            box-shadow: 0 0 0 3px rgba(245, 158, 11, 0.5);
+            transform: scale(1.1);
+        }
+
+        /* Offcanvas/Winnings Calculator */
+        .offcanvas.offcanvas-end {
+            width: 100%;
+            max-width: 400px;
+        }
+    </style>
+</head>
+<body>
+
+    <div id="overlay" class="overlay d-none"></div>
+
+    <header class="position-absolute top-0 start-0 end-0 z-3 bg-transparent">
+        <nav class="navbar navbar-expand-lg">
+            <div class="container-fluid px-4 px-sm-6 px-lg-8">
+                <div class="d-flex align-items-center">
+                    <button class="navbar-toggler me-2" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasNavbar" aria-controls="offcanvasNavbar" aria-label="Toggle navigation">
+                        <span class="navbar-toggler-icon"></span>
+                    </button>
+                    <div class="d-flex align-items-center me-3">
+                        <div class="d-flex align-items-center justify-content-center text-white me-2">
+                            <img src="resources/Img/logofav.png" alt="Rand Lottery Logo" class="h-10 w-10">
+                        </div>
+                        <div>
+                            <span class="fs-4 fw-bold text-white">Rand</span>
+                            <div class="text-xs text-warning fw-medium">LOTTERY</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="d-flex align-items-center">
+                    <button id="navCalculator" type="button" class="btn btn-light d-flex align-items-center me-2">
+                        <img src="resources/Img/cedi.png" alt="cedi" class="h-5 w-5 me-1" title="Calculate Win">
+                        <span class="d-none d-sm-inline">Calculator</span>
+                    </button>
+                    <button class="btn btn-outline-light d-none d-sm-block me-2">Login</button>
+                    <button class="btn btn-warning">Sign Up</button>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <div class="offcanvas offcanvas-start" tabindex="-1" id="offcanvasNavbar" aria-labelledby="offcanvasNavbarLabel">
+        <div class="offcanvas-header bg-dark text-white">
+            <h5 class="offcanvas-title" id="offcanvasNavbarLabel">Rand Lottery</h5>
+            <button type="button" class="btn-close btn-close-white" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+        </div>
+        <div class="offcanvas-body">
+            <ul class="navbar-nav justify-content-end flex-grow-1 pe-3">
+                <li class="nav-item">
+                    <a class="nav-link active" aria-current="page" href="#">Home</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#">Play Games</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#">Results</a>
+                </li>
+            </ul>
+        </div>
+        <div class="offcanvas-footer p-4 border-top">
+            <div class="text-center text-secondary small">
+                <p>info@randlotterylimited.com</p>
+                <p>+233 XX XXX XXXX</p>
+            </div>
+        </div>
+    </div>
+
+    <div class="hero-section">
+        <video class="hero-video" autoplay loop muted>
+            <source src="resources/Img/motion.mp4" type="video/mp4">
+            Your browser does not support the video tag.
+        </video>
+        <div class="video-overlay"></div>
+        <div class="hero-content">
+            <h1 class="hero-title">Your Fortune Awaits</h1>
+            <p class="hero-subtitle">Select your lucky numbers and take a chance at winning big! Every number could be the one.</p>
+        </div>
+    </div>
+    <div class="lotto-wrapper">
+        <div class="container">
+            <div class="text-center mb-5 mb-sm-6 mb-lg-7">
+                <h2 class="heading-responsive-text fw-bolder mb-3 mb-sm-4" style="color: rgb(12, 10, 96);">
+                    Play & Win Today
+                </h2>
+                <p class="paragraph-responsive-text text-custom-gray-600 col-lg-8 mx-auto px-4">Choose your lucky numbers and join thousands of winners. Your fortune is just one click away!</p>
+            </div>
+            
+            <form id="lottoGameForm" onsubmit="event.preventDefault(); return false;">
+                <div class="border border-2 mb-5 shadow rounded-4">
+                    <div class="bg-white rounded-4 p-4 p-md-5">
+                        <div class="d-flex align-items-center mb-4 flex-nowrap">
+                            <div class="d-flex align-items-center justify-content-center text-white fw-bold fs-4 me-4 shadow-lg" style="width: 3.5rem; height: 3.5rem; background-image: linear-gradient(to right, #8b5cf6, #3b82f6); border-radius: 0.5rem;">1</div>
+                            <div class="me-auto">
+                                <h3 class="fw-bold text-dark mb-1 serif-font fs-3 fs-sm-4">Choose Your Game Day</h3>
+                                <p class="text-secondary mb-0">Select when you want to play and win</p>
+                            </div>
+                            <button id="toggleCalculator" type="button" class="btn btn-success text-white px-4 py-2 rounded-3 fw-semibold shadow-lg d-flex align-items-center ms-auto">
+                                <span class="fs-4 me-2">💰</span>
+                                <span class="d-none d-sm-inline">Calculate Winnings</span>
+                                <span class="d-sm-none">Calculator</span>
+                            </button>
+                        </div>
+                        <div class="d-flex flex-nowrap overflow-auto py-2 gap-2 gap-sm-3 gap-lg-4 justify-content-center">
+                             <button title="Monday Game" type="button" class="game-btn shadow-lg" data-game="monday">
+                                <img src="resources/Img/Mondaygame.jpeg" alt="Monday Game" class="game-btn-img">
+                            </button>
+                            <button title="Tuesday Game" type="button" class="game-btn shadow-lg" data-game="tuesday">
+                                <img src="resources/Img/tuesday.webp" alt="Tuesday Game" class="game-btn-img">
+                            </button>
+                            <button title="Wednesday Game" type="button" class="game-btn shadow-lg" data-game="wednesday">
+                                <img src="resources/Img/wednesdyGame.png" alt="Wednesday Game" class="game-btn-img">
+                            </button>
+                            <button title="Thursday Game" type="button" class="game-btn shadow-lg" data-game="thursday">
+                                <img src="resources/Img/thursdayGame.png" alt="Thursday Game" class="game-btn-img">
+                            </button>
+                            <button title="Friday Game" type="button" class="game-btn shadow-lg" data-game="friday">
+                                <img src="resources/Img/fridayGame.jpeg" alt="Friday Game" class="game-btn-img">
+                            </button>
+                            <button title="Saturday Game" type="button" class="game-btn shadow-lg" data-game="saturday">
+                                <img src="resources/Img/saturday.jpeg" alt="Saturday Game" class="game-btn-img">
+                            </button>
+                            <button title="Sunday Game" type="button" class="game-btn shadow-lg" data-game="sunday">
+                                <img src="resources/Img/sundayGame.jpeg" alt="Sunday Game" class="game-btn-img">
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="border border-2 mb-5 shadow rounded-4">
+                    <div class="bg-white rounded-4 p-4 p-md-5">
+                        <div class="d-flex align-items-center mb-4">
+                            <div class="d-flex align-items-center justify-content-center text-white fw-bold fs-4 me-4 shadow-lg bg-dark rounded-4" style="width: 3.5rem; height: 3.5rem;">2</div>
+                            <div class="me-auto">
+                                <h3 class="fw-bold text-dark mb-1 serif-font fs-3 fs-sm-4">Select Bet Type</h3>
+                                <p class="text-secondary mb-0">Choose your preferred betting strategy</p>
+                            </div>
+                        </div>
+                        
+                        <div class="row g-2 g-sm-3 g-lg-4">
+                            <div class="col-4 col-sm-3 col-lg-2">
+                                <button type="button" class="btn btn-light w-100 border border-2 text-dark py-3 rounded-3 fw-semibold small bet-type-btn d-flex flex-column align-items-center justify-content-center" data-bet="direct1">
+                                    <div class="w-25 h-25 bg-dark rounded-circle d-flex align-items-center justify-content-center text-white fw-bold small mb-1">1</div>
+                                    <span class="text-center">Direct 1</span>
+                                </button>
+                            </div>
+                            <div class="col-4 col-sm-3 col-lg-2">
+                                <button type="button" class="btn btn-light w-100 border border-2 text-dark py-3 rounded-3 fw-semibold small bet-type-btn d-flex flex-column align-items-center justify-content-center" data-bet="direct2">
+                                    <div class="w-25 h-25 bg-dark rounded-circle d-flex align-items-center justify-content-center text-white fw-bold small mb-1">2</div>
+                                    <span class="text-center">Direct 2</span>
+                                </button>
+                            </div>
+                            <div class="col-4 col-sm-3 col-lg-2">
+                                <button type="button" class="btn btn-light w-100 border border-2 text-dark py-3 rounded-3 fw-semibold small bet-type-btn d-flex flex-column align-items-center justify-content-center" data-bet="direct3">
+                                    <div class="w-25 h-25 bg-dark rounded-circle d-flex align-items-center justify-content-center text-white fw-bold small mb-1">3</div>
+                                    <span class="text-center">Direct 3</span>
+                                </button>
+                            </div>
+                            <div class="col-4 col-sm-3 col-lg-2">
+                                <button type="button" class="btn btn-light w-100 border border-2 text-dark py-3 rounded-3 fw-semibold small bet-type-btn d-flex flex-column align-items-center justify-content-center" data-bet="perm2">
+                                    <div class="w-25 h-25 bg-dark rounded-circle d-flex align-items-center justify-content-center text-white fw-bold small mb-1">P2</div>
+                                    <span class="text-center">Perm 2</span>
+                                </button>
+                            </div>
+                            <div class="col-4 col-sm-3 col-lg-2">
+                                <button type="button" class="btn btn-light w-100 border border-2 text-dark py-3 rounded-3 fw-semibold small bet-type-btn d-flex flex-column align-items-center justify-content-center" data-bet="perm3">
+                                    <div class="w-25 h-25 bg-dark rounded-circle d-flex align-items-center justify-content-center text-white fw-bold small mb-1">P3</div>
+                                    <span class="text-center">Perm 3</span>
+                                </button>
+                            </div>
+                            <div class="col-4 col-sm-3 col-lg-2">
+                                <button type="button" class="btn btn-light w-100 border border-2 text-dark py-3 rounded-3 fw-semibold small bet-type-btn d-flex flex-column align-items-center justify-content-center" data-bet="banker">
+                                     <svg class="bi text-dark" width="1.5em" height="1.5em" fill="currentColor" viewBox="0 0 16 16">
+                                        <path d="M12.736 3.97a.733.733 0 0 1 1.047 0c.286.289.29.756.01 1.05L7.88 12.01a.733.733 0 0 1-1.065.02L3.217 8.384a.757.757 0 0 1 0-1.06.733.733 0 0 1 1.047 0l3.052 3.098 5.498-5.56zm4.646-4.646a.5.5 0 0 0-.708 0L8 7.293 4.854 4.146a.5.5 0 1 0-.708.708L7.293 8l-3.147 3.146a.5.5 0 0 0 .708.708L8 8.707l3.146 3.147a.5.5 0 0 0 .708-.708L8.707 8l3.147-3.146a.5.5 0 0 0 0-.708z"/>
+                                    </svg>
+                                    <span class="text-center mt-1">Banker</span>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="border border-2 mb-5 shadow rounded-4">
+                    <div class="bg-white rounded-4 p-4 p-md-5">
+                        <div class="d-flex align-items-center mb-4">
+                            <div class="d-flex align-items-center justify-content-center text-white fw-bold fs-4 me-4 shadow-lg bg-warning rounded-4" style="width: 3.5rem; height: 3.5rem;">3</div>
+                            <div class="me-auto">
+                                <h3 class="fw-bold text-dark mb-1 serif-font fs-3 fs-sm-4">Set Your Stake & Payment</h3>
+                                <p class="text-secondary mb-0">Choose your bet amount and payment method</p>
+                            </div>
+                        </div>
+
+                        <div class="row g-4 g-sm-5 g-lg-6">
+                            <div class="col-lg-6">
+                                <div class="bg-light rounded-3 p-2 p-sm-4 border border-info">
+                                    <h4 class="fs-5 fs-sm-4 fw-bold text-dark mb-4 mb-sm-6 d-flex align-items-center">
+                                        <span class="me-2 me-sm-3">
+                                            <img src="resources/Img/cedi.png" alt="Momo Number" class="w-100" style="width: 2rem; height: 2rem;">
+                                        </span>
+                                        Your Stake Amount
+                                    </h4>
+                                    <div class="position-relative">
+                                        <input type="number" id="takeAmount" name="takeAmount" min="1" max="200" placeholder="Enter amount" class="form-control w-100 px-4 px-sm-6 py-3 py-sm-4 border border-2 rounded-3 fs-5 fs-sm-4 fw-bold text-center bg-white shadow-lg">
+                                    </div>
+                                    <div class="d-flex justify-content-between mt-3 mt-sm-4 small text-secondary">
+                                        <span>Minimum: ₵1</span>
+                                        <span>Maximum: ₵200</span>
+                                    </div>
+                                    <div class="row g-2 mt-4 mt-sm-6">
+                                        <div class="col-6 col-sm-3">
+                                            <button type="button" class="btn btn-warning w-100 text-dark fw-semibold py-2 px-3 rounded-3" data-amount="5">₵5</button>
+                                        </div>
+                                        <div class="col-6 col-sm-3">
+                                            <button type="button" class="btn btn-warning w-100 text-dark fw-semibold py-2 px-3 rounded-3" data-amount="10">₵10</button>
+                                        </div>
+                                        <div class="col-6 col-sm-3">
+                                            <button type="button" class="btn btn-warning w-100 text-dark fw-semibold py-2 px-3 rounded-3" data-amount="20">₵20</button>
+                                        </div>
+                                        <div class="col-6 col-sm-3">
+                                            <button type="button" class="btn btn-warning w-100 text-dark fw-semibold py-2 px-3 rounded-3" data-amount="50">₵50</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-lg-6">
+                                <div class="bg-light rounded-3 p-2 p-sm-4 border border-info">
+                                    <h4 class="fs-5 fs-sm-4 fw-bold text-dark mb-4 mb-sm-6 d-flex align-items-center">
+                                        <span class="me-2 me-sm-3">
+                                            <img src="resources/Img/momo.png" alt="Momo Number" class="w-100" style="width: 2rem; height: 2rem;">
+                                        </span>
+                                        Mobile Money Payment
+                                    </h4>
+                                    
+                                    <div class="row g-2 g-sm-3 mb-4 mb-sm-6">
+                                        <div class="col-4 d-flex justify-content-center">
+                                            <label class="network-option-label d-flex flex-column align-items-center text-center cursor-pointer bg-white rounded-circle p-3 p-sm-4 border border-2 transition shadow" style="width: 5rem; height: 5rem;">
+                                                <input type="radio" name="network" value="mtn" class="d-none">
+                                                <div class="d-flex align-items-center justify-content-center rounded-circle" style="width: 3rem; height: 3rem;">
+                                                    <img src="resources/Img/mtn.png" alt="MTN MOMO" class="w-100 h-100 rounded-circle">
+                                                </div>
+                                            </label>
+                                        </div>
+                                        <div class="col-4 d-flex justify-content-center">
+                                            <label class="network-option-label d-flex flex-column align-items-center text-center cursor-pointer bg-white rounded-circle p-3 p-sm-4 border border-2 transition shadow" style="width: 5rem; height: 5rem;">
+                                                <input type="radio" name="network" value="telecel" class="d-none">
+                                                <div class="d-flex align-items-center justify-content-center rounded-circle" style="width: 3rem; height: 3rem;">
+                                                    <img src="resources/Img/voda.png" alt="Telecel" class="w-100 h-100 rounded-circle">
+                                                </div>
+                                            </label>
+                                        </div>
+                                        <div class="col-4 d-flex justify-content-center">
+                                            <label class="network-option-label d-flex flex-column align-items-center text-center cursor-pointer bg-white rounded-circle p-3 p-sm-4 border border-2 transition shadow" style="width: 5rem; height: 5rem;">
+                                                <input type="radio" name="network" value="tigo" class="d-none">
+                                                <div class="d-flex align-items-center justify-content-center rounded-circle" style="width: 3rem; height: 3rem;">
+                                                    <img src="resources/Img/airtel.png" alt="Airtel Tigo" class="w-100 h-100 rounded-circle">
+                                                </div>
+                                            </label>
+                                        </div>
+                                    </div>
+                                    
+                                    <input type="tel" id="momoNumber" name="momoNumber" placeholder="0XX XXX XXXX" class="form-control w-100 px-4 px-sm-6 py-3 py-sm-4 border border-2 border-info rounded-3 fs-5 fs-sm-4 fw-semibold text-center bg-white shadow-lg">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="border border-2 mb-5 shadow rounded-4">
+                    <div class="bg-white rounded-4 p-4 p-md-5">
+                        <div class="d-flex align-items-center mb-4">
+                            <div class="d-flex align-items-center justify-content-center text-white fw-bold fs-4 me-4 shadow-lg bg-info rounded-4" style="width: 3.5rem; height: 3.5rem;">4</div>
+                            <div class="me-auto">
+                                <h3 class="fw-bold text-dark mb-1 serif-font fs-3 fs-sm-4">Pick Your Numbers</h3>
+                                <p class="text-secondary mb-0">Choose your 5 favorite numbers from the grid</p>
+                            </div>
+                        </div>
+
+                        <div id="selectedNumbersOutput" class="selected-numbers-display mb-4">
+                            <span class="no-selection-text">No numbers selected yet.</span>
+                        </div>
+
+                        <div id="numberGrid" class="number-grid">
+                            </div>
+
+                        <div class="d-flex justify-content-center mt-4">
+                            <button id="clearSelection" type="button" class="btn btn-outline-danger btn-lg me-2 fw-bold d-flex align-items-center">
+                                <svg class="bi me-2" width="1em" height="1em" fill="currentColor" viewBox="0 0 16 16">
+                                    <path d="M11 1.5v1h3.5a.5.5 0 0 1 0 1h-.538l-.853 10.66A2 2 0 0 1 11.115 16h-6.23a2 2 0 0 1-1.994-1.84L2.038 3.5H1.5a.5.5 0 0 1 0-1H5v-1A1.5 1.5 0 0 1 6.5 0h3A1.5 1.5 0 0 1 11 1.5m-5 0v1h4v-1a.5.5 0 0 0-.5-.5h-3a.5.5 0 0 0-.5.5M4.5 5.029l.5 8.5a.5.5 0 1 0 .998-.06l-.5-8.5a.5.5 0 1 0-.998.06Zm6.53-.528a.5.5 0 0 0-.528.47l-.5 8.5a.5.5 0 0 0 .998.058l.5-8.5a.5.5 0 0 0-.47-.528ZM8 4.5a.5.5 0 0 0-.5.5v8.5a.5.5 0 0 0 1 0V5a.5.5 0 0 0-.5-.5"/>
+                                </svg>
+                                Clear
+                            </button>
+                            <button id="playNow" type="submit" class="btn btn-success btn-lg ms-2 fw-bold d-flex align-items-center">
+                                <svg class="bi me-2" width="1em" height="1em" fill="currentColor" viewBox="0 0 16 16">
+                                    <path d="M.5 1a.5.5 0 0 0 0 1h.614l.872 10.465A2 2 0 0 0 4.105 14h5.79c.954 0 1.83-.564 2.22-1.465l.872-10.465H15.5a.5.5 0 0 0 0-1zM4.105 13a1 1 0 0 1-.983-.983l-.5-6A1 1 0 0 1 4.105 5h7.79a1 1 0 0 1 .983 1.017l-.5 6a1 1 0 0 1-.983.983zM8 7.5a.5.5 0 0 0-1 0V9H.5a.5.5 0 0 0 0 1H7v2.5a.5.5 0 0 0 1 0V10h6.5a.5.5 0 0 0 0-1H8z"/>
+                                </svg>
+                                Play Now
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <div class="offcanvas offcanvas-end" tabindex="-1" id="winningsCalculator" aria-labelledby="winningsCalculatorLabel">
+        <div class="offcanvas-header">
+            <h5 class="offcanvas-title fw-bold" id="winningsCalculatorLabel">Potential Winnings</h5>
+            <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+        </div>
+        <div class="offcanvas-body">
+            <div class="mb-4">
+                <label for="calcGameSelect" class="form-label text-secondary">Game Day</label>
+                <select id="calcGameSelect" class="form-select">
+                    <option value="">Select game day</option>
+                    <option value="monday">Monday Fire Draw</option>
+                    <option value="tuesday">Tuesday Power Play</option>
+                    <option value="wednesday">Wednesday Diamond Draw</option>
+                    <option value="thursday">Thursday Star Luck</option>
+                    <option value="friday">Friday Bullseye</option>
+                    <option value="saturday">Saturday Mega Win</option>
+                    <option value="sunday">Sunday Lucky Seven</option>
+                </select>
+            </div>
+            
+            <div class="mb-4">
+                <label for="calcBetSelect" class="form-label text-secondary">Bet Type</label>
+                <select id="calcBetSelect" class="form-select">
+                    <option value="">Select bet type</option>
+                    <option value="direct1">Direct 1 </option>
+                    <option value="direct2">Direct 2 (2 Sure)</option>
+                    <option value="direct3">Direct 3 </option>
+                    <option value="perm2">Perm 2 </option>
+                    <option value="perm3">Perm 3</option>
+                    <option value="banker">Banker (Best odds)</option>
+                </select>
+            </div>
+            
+            <div class="mb-4">
+                <label for="calcStakeInput" class="form-label text-secondary">Your Stake</label>
+                <div class="input-group">
+                    <span class="input-group-text">₵</span>
+                    <input type="number" id="calcStakeInput" min="1" max="200" placeholder="Enter amount" class="form-control">
+                </div>
+            </div>
+            
+            <div class="bg-light p-3 rounded-3 border border-success">
+                <div class="text-secondary small">Potential Win</div>
+                <div id="calcPotentialWin" class="fs-4 fw-bold text-success">₵0</div>
+                <div id="calcMultiplier" class="text-secondary small mt-1">Multiplier: 0x</div>
+            </div>
+        </div>
+        
+        <div class="offcanvas-footer p-3 border-top">
+            <div class="text-secondary text-center small">
+                💡 Calculations are estimates based on current odds
+            </div>
+        </div>
+    </div>
+    
+    <div id="customModal" class="custom-modal">
+        <div class="custom-modal-content">
+            <div class="custom-modal-header">
+                <h5 id="modalTitle"></h5>
+            </div>
+            <div class="custom-modal-body">
+                <p id="modalMessage"></p>
+            </div>
+            <div class="custom-modal-footer">
+                <button type="button" class="close-modal-btn">OK</button>
+            </div>
+        </div>
+    </div>
+    
+    <footer class="bg-dark text-white p-4">
+        <div class="container">
+            <div class="d-flex flex-wrap justify-content-between align-items-center py-3 my-4 border-top border-secondary">
+                <div class="col-md-4 d-flex align-items-center">
+                    <div class="d-inline-flex me-2 text-white">
+                        <img src="resources/Img/logofav.png" alt="Rand Lottery Logo" class="h-8">
+                    </div>
+                    <span class="mb-3 mb-md-0 text-secondary">© 2024 Rand Lottery, Inc</span>
+                </div>
+                <ul class="nav col-md-4 justify-content-end list-unstyled d-flex">
+                    <li class="ms-3"><a class="text-secondary" href="#"><svg class="bi" width="24" height="24"><use xlink:href="#twitter"></use></svg></a></li>
+                    <li class="ms-3"><a class="text-secondary" href="#"><svg class="bi" width="24" height="24"><use xlink:href="#instagram"></use></svg></a></li>
+                    <li class="ms-3"><a class="text-secondary" href="#"><svg class="bi" width="24" height="24"><use xlink:href="#facebook"></use></svg></a></li>
+                </ul>
+            </div>
+        </div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+    <script>
+        const numberGrid = document.getElementById('numberGrid');
+        const selectedNumbersOutput = document.getElementById('selectedNumbersOutput');
+        const clearSelectionButton = document.getElementById('clearSelection');
+        const playNowButton = document.getElementById('playNow');
+        const gameDayButtons = document.querySelectorAll('.game-btn');
+        const betTypeButtons = document.querySelectorAll('.bet-type-btn');
+        const networkOptions = document.querySelectorAll('input[name="network"]');
+        const lottoGameForm = document.getElementById('lottoGameForm');
+
+        const customModal = document.getElementById('customModal');
+        const modalTitle = document.getElementById('modalTitle');
+        const modalMessage = document.getElementById('modalMessage');
+        const closeModalBtn = customModal.querySelector('.close-modal-btn');
+
+        let selectedNumbers = [];
+
+        // Function to show custom modal
+        function showCustomModal(title, message) {
+            modalTitle.textContent = title;
+            modalMessage.innerHTML = message;
+            customModal.style.display = 'flex'; // Use flex to center
+        }
+
+        // Function to hide custom modal
+        function hideCustomModal() {
+            customModal.style.display = 'none';
+        }
+
+        // Event listener for closing the modal
+        closeModalBtn.addEventListener('click', hideCustomModal);
+
+        // Game day button selection logic
+        gameDayButtons.forEach(button => {
+            button.addEventListener('click', () => {
+                gameDayButtons.forEach(btn => btn.classList.remove('active'));
+                button.classList.add('active');
+            });
+        });
+
+        // Bet type button selection logic
+        betTypeButtons.forEach(button => {
+            button.addEventListener('click', () => {
+                betTypeButtons.forEach(btn => btn.classList.remove('active'));
+                button.classList.add('active');
+            });
+        });
+
+        // Network option selection logic
+        networkOptions.forEach(option => {
+            option.addEventListener('change', () => {
+                document.querySelectorAll('.network-option-label').forEach(label => {
+                    label.classList.remove('active');
+                });
+                if (option.checked) {
+                    option.closest('.network-option-label').classList.add('active');
+                }
+            });
+        });
+
+        // Generate number buttons (1 to 90)
+        for (let i = 1; i <= 90; i++) {
+            const button = document.createElement('div');
+            button.classList.add('number-button');
+            button.textContent = i;
+            button.dataset.number = i;
+
+            button.addEventListener('click', () => {
+                const number = parseInt(button.dataset.number);
+                const index = selectedNumbers.indexOf(number);
+
+                if (index === -1) {
+                    if (selectedNumbers.length < 6) {
+                        selectedNumbers.push(number);
+                        button.classList.add('selected');
+                    } else {
+                        showCustomModal('Selection Limit Reached', 'You can only select up to 6 numbers.');
+                    }
+                } else {
+                    selectedNumbers.splice(index, 1);
+                    button.classList.remove('selected');
+                }
+                updateSelectedNumbersDisplay();
+            });
+            numberGrid.appendChild(button);
+        }
+
+        // Update the display of selected numbers
+        function updateSelectedNumbersDisplay() {
+            if (selectedNumbers.length === 0) {
+                selectedNumbersOutput.innerHTML = '<span class="no-selection-text">No numbers selected yet.</span>';
+            } else {
+                const sortedNumbers = [...selectedNumbers].sort((a, b) => a - b);
+                selectedNumbersOutput.innerHTML = sortedNumbers.map(num =>
+                    `<div class="selected-number-badge">${num}</div>`
+                ).join('');
+            }
+        }
+
+        // Clear all selected numbers
+        clearSelectionButton.addEventListener('click', () => {
+            selectedNumbers.forEach(num => {
+                const button = document.querySelector(`.number-button[data-number="${num}"]`);
+                if (button) {
+                    button.classList.remove('selected');
+                }
+            });
+            selectedNumbers = [];
+            updateSelectedNumbersDisplay();
+            showCustomModal('Selection Cleared', 'All your selected numbers have been cleared.');
+        });
+        
+        // Stake Amount buttons logic
+        const stakeAmountInput = document.getElementById('takeAmount');
+        const stakeButtons = document.querySelectorAll('[data-amount]');
+        stakeButtons.forEach(button => {
+            button.addEventListener('click', () => {
+                const amount = button.dataset.amount;
+                stakeAmountInput.value = amount;
+            });
+        });
+
+        // Handle Play Now button click and form submission
+        lottoGameForm.addEventListener('submit', (event) => {
+            event.preventDefault();
+
+            const selectedGameDay = document.querySelector('.game-btn.active');
+            const selectedBetType = document.querySelector('.bet-type-btn.active');
+            const stakeAmount = document.getElementById('takeAmount').value;
+            const momoNumber = document.getElementById('momoNumber').value;
+            const selectedNetwork = document.querySelector('input[name="network"]:checked');
+            
+            if (!selectedGameDay) {
+                showCustomModal('Missing Information', 'Please select a **game day**.');
+                return;
+            }
+            if (!selectedBetType) {
+                showCustomModal('Missing Information', 'Please select a **bet type**.');
+                return;
+            }
+            if (selectedNumbers.length === 0) {
+                showCustomModal('Missing Information', 'Please select at least **one number** to play.');
+                return;
+            }
+            if (!stakeAmount || stakeAmount <= 0) {
+                showCustomModal('Missing Information', 'Please enter a valid **stake amount**.');
+                return;
+            }
+            if (!selectedNetwork) {
+                showCustomModal('Missing Information', 'Please select a **mobile money network**.');
+                return;
+            }
+            if (!momoNumber) {
+                showCustomModal('Missing Information', 'Please enter your **mobile money number**.');
+                return;
+            }
+
+            const formData = {
+                gameDay: selectedGameDay.dataset.game,
+                betType: selectedBetType.dataset.bet,
+                numbers: selectedNumbers.sort((a, b) => a - b),
+                stake: stakeAmount,
+                network: selectedNetwork.value,
+                phoneNumber: momoNumber
+            };
+
+            showCustomModal('Submission Successful!', `You have submitted a ticket for **${formData.gameDay}** with the following details:<br><br>
+            **Bet Type:** ${formData.betType}<br>
+            **Numbers:** ${formData.numbers.join(', ')}<br>
+            **Stake:** ₵${formData.stake}<br>
+            **Network:** ${formData.network.toUpperCase()}<br>
+            **Phone:** ${formData.phoneNumber}`);
+
+            console.log('Form Submitted:', formData);
+            
+            // You can add your AJAX submission logic here
+        });
+
+        // --- START CALCULATOR SCRIPT ---
+        const calcGameSelect = document.getElementById('calcGameSelect');
+        const calcBetSelect = document.getElementById('calcBetSelect');
+        const calcStakeInput = document.getElementById('calcStakeInput');
+        const calcPotentialWin = document.getElementById('calcPotentialWin');
+        const calcMultiplier = document.getElementById('calcMultiplier');
+
+        // Define odds for each bet type
+        const winningsOdds = {
+            direct1: 2,
+            direct2: 120,
+            direct3: 1200,
+            perm2: 15,
+            perm3: 30,
+            banker: 12,
+        };
+
+        // Function to update the winnings display
+        function updateWinnings() {
+            const betType = calcBetSelect.value;
+            const stake = parseFloat(calcStakeInput.value) || 0;
+            
+            if (betType && stake > 0) {
+                const multiplier = winningsOdds[betType] || 0;
+                const potentialWin = stake * multiplier;
+
+                calcPotentialWin.textContent = `₵${potentialWin.toFixed(2)}`;
+                calcMultiplier.textContent = `Multiplier: ${multiplier}x`;
+            } else {
+                calcPotentialWin.textContent = '₵0';
+                calcMultiplier.textContent = 'Multiplier: 0x';
+            }
+        }
+
+        // Add event listeners to the calculator inputs
+        calcGameSelect.addEventListener('change', updateWinnings);
+        calcBetSelect.addEventListener('change', updateWinnings);
+        calcStakeInput.addEventListener('input', updateWinnings);
+
+        // --- END CALCULATOR SCRIPT ---
+        
+        // New Bootstrap Offcanvas/Modal JS
+        document.addEventListener('DOMContentLoaded', function() {
+            const offcanvasWinnings = new bootstrap.Offcanvas(document.getElementById('winningsCalculator'));
+            const navCalculatorBtn = document.getElementById('navCalculator');
+            const toggleCalculatorBtn = document.getElementById('toggleCalculator');
+
+            if (navCalculatorBtn) {
+                navCalculatorBtn.addEventListener('click', () => {
+                    offcanvasWinnings.show();
+                });
+            }
+
+            if (toggleCalculatorBtn) {
+                toggleCalculatorBtn.addEventListener('click', () => {
+                    offcanvasWinnings.show();
+                });
+            }
+        });
+
+        updateSelectedNumbersDisplay();
+    </script>
+</body>
+</html>

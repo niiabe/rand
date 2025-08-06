@@ -8,6 +8,7 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=DM+Display&display=swap" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <script src="https://cdn.tailwindcss.com"></script>
     <style>
         body {
             background-color: #f8f9fa; /* Light background */
@@ -81,14 +82,22 @@
             padding-top: 50px;
             padding-bottom: 50px;
         }
-        /* Lotto Container Styling */
-        .lotto-container {
-            max-width: 960px; /* Bigger container */
+        /* Unified Content Container */
+        .lotto-content-container {
+            max-width: 960px; /* Set a consistent max-width */
             margin: 0 auto;
             background-color: #ffffff;
             border-radius: 10px;
             box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
             padding: 30px;
+        }
+        /* Lotto Container Styling */
+        .lotto-container {
+            /* Now handled by lotto-content-container */
+            background-color: transparent;
+            border-radius: 0;
+            box-shadow: none;
+            padding: 0;
         }
         .lotto-container h2 {
             font-family: 'DM Display', sans-serif; /* DM Display font applied */
@@ -341,8 +350,19 @@
         .custom-rounded-full {
             border-radius: 9999px;
         }
-        .network-option:hover {
+        /* Network option styling */
+        .network-option {
+            transition: all 0.2s ease-in-out;
+            cursor: pointer;
+        }
+        .network-option.selected {
             border-color: #f6ad55;
+            box-shadow: 0 0 0 3px rgba(246, 173, 85, 0.5);
+            transform: scale(1.05);
+        }
+        /* Network image inside the button */
+        .network-option img {
+            border-radius: 50%; /* Makes the image fully circular */
         }
         .custom-hover-bg-yellow-200:hover {
              background-color: #fefcbf;
@@ -351,9 +371,191 @@
              color: #975a16;
         }
 
+        /* New custom styles for "Select Bet Type" section */
+        .text-slate-800 {
+            color: #1e293b;
+        }
+        .text-slate-600 {
+            color: #475569;
+        }
+        .bg-slate-800 {
+            background-color: #1e293b;
+        }
+        .border-slate-200 {
+            border-color: #e2e8f0;
+        }
+        .border-slate-400:hover {
+            border-color: #94a3b8;
+        }
+        .bet-type-btn {
+            transition: all 0.3s ease-in-out;
+        }
+        .bet-type-btn:hover {
+            background-color: #f8fafc;
+            transform: scale(1.02);
+        }
+        /* Corrected CSS for selected bet type buttons */
+        .bet-type-btn.selected {
+            background-color: #e0f2fe; /* light blue background */
+            border-color: #007bff; /* blue border */
+            box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.25); /* blue shadow */
+            transform: scale(1.05); /* slightly bigger */
+        }
+        .serif-font {
+            font-family: 'DM Display', sans-serif;
+        }
+        .elegant-border-inner {
+            background-color: #fff;
+            border-radius: 1rem;
+            position: relative;
+        }
+        .elegant-border-inner::before {
+            content: '';
+            position: absolute;
+            inset: -2px;
+            z-index: -1;
+            border-radius: inherit;
+            background: linear-gradient(to right, #8b5cf6, #3b82f6);
+            padding: 2px;
+            -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+            mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+            -webkit-mask-composite: xor;
+            mask-composite: exclude;
+        }
+        /* Game day buttons */
+        .game-btn {
+            width: 6rem;
+            height: 6rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            transition: all 0.3s ease-in-out;
+            cursor: pointer;
+            background-color: #fff;
+            border: 2px solid transparent;
+            padding: 0.5rem;
+        }
+        .game-btn:hover {
+            transform: scale(1.05);
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+        }
+        .game-btn.selected {
+            border-color: #3b82f6;
+            box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.5);
+            transform: scale(1.05);
+        }
+        .game-btn-img {
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            object-fit: cover;
+        }
+        @media (min-width: 576px) {
+            .game-btn {
+                width: 6rem;
+                height: 6rem;
+            }
+        }
+        .calculate-btn {
+            background-image: linear-gradient(to right, #34d399, #10b981);
+        }
+        .calculate-btn:hover {
+            background-image: linear-gradient(to right, #10b981, #059669);
+        }
+
+         /* This is a crucial CSS rule to make the transition smooth */
+        aside {
+            transition: transform 0.3s ease-in-out;
+        }
+        header {
+            background-color: transparent !important;
+        }
     </style>
 </head>
 <body>
+
+    <header class="absolute top-0 left-0 right-0 z-50 bg-transparent">
+        <div class="container mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between py-4 sm:py-6">
+                <div class="flex items-center space-x-2 sm:space-x-3">
+                    <button id="burgerMenu" class="p-2 text-white hover:text-blue-200 transition duration-300">
+                        <svg class="w-5 h-5 sm:w-6 sm:h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
+                        </svg>
+                    </button>
+                    <div class="flex items-center space-x-2 sm:space-x-3">
+                        <div class="w-10 h-10 sm:w-12 sm:h-12 glass-effect rounded-xl flex items-center justify-center floating-animation">
+                            <img src="resources/Img/logofav.png" alt="Rand Lottery Logo" class="text-2xl sm:text-3xl"/>
+                        </div>
+                        <div>
+                            <span class="text-lg sm:text-4xl font-bold text-white glow-text">Rand</span>
+                            <div class="text-3xl sm:text-lg text-yellow-300 font-medium">LOTTERY</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="flex items-center space-x-2 sm:space-x-3">
+                    <button id="navCalculator" class="bg-white text-black px-2 py-2 sm:px-3 sm:py-2 rounded-lg font-medium hover:from-green-600 hover:to-emerald-600 transition duration-300 text-sm flex items-center">
+                        <span class="text-lg mr-1">
+                            <img src="resources/Img/cedi.png" alt="cedi" class="h-5 w-5 object-fit: contain;" title="Calculate Win">
+                        </span>
+                        <span class="hidden sm:inline">Calculator</span>
+                    </button>
+                    <button class="hidden sm:block bg-white bg-opacity-20 backdrop-blur-sm text-black px-3 py-2 sm:px-4 sm:py-2 rounded-lg font-medium hover:bg-opacity-30 transition duration-300 text-sm">Login</button>
+                    <button class="bg-white text-purple-600 px-3 py-2 sm:px-4 sm:py-2 rounded-lg font-medium hover:bg-gray-100 transition duration-300 text-sm">Sign Up</button>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <aside id="asideNav" class="fixed top-0 left-0 h-full w-72 sm:w-80 bg-white shadow-2xl transform -translate-x-full transition-transform duration-300 ease-in-out z-50">
+        <div class="bg-black p-4 sm:p-6 text-white">
+            <div class="flex items-center justify-between">
+                <div class="flex items-center space-x-2 sm:space-x-3">
+                    <div class="w-8 h-8 sm:w-10 sm:h-10 glass-effect rounded-xl flex items-center justify-center">
+                        <img src="resources/Img/logofav.png" alt="Rand Logo" >
+                    </div>
+                    <div>
+                        <span class="text-lg sm:text-xl font-bold">Rand</span>
+                        <div class="text-xs text-yellow-300 font-medium">Lottery</div>
+                    </div>
+                </div>
+                <button id="closeNav" class="p-2 hover:bg-white hover:bg-opacity-20 rounded-lg transition duration-300">
+                    <svg class="w-5 h-5 sm:w-6 sm:h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                    </svg>
+                </button>
+            </div>
+        </div>
+        
+        <div class="p-4 sm:p-6">
+            <nav class="space-y-2 sm:space-y-4">
+                <a href="#" class="flex items-center space-x-3 sm:space-x-4 text-gray-800 hover:text-purple-600 font-medium transition duration-300 py-3 sm:py-4 px-3 sm:px-4 rounded-xl hover:bg-gradient-to-r hover:from-purple-50 hover:to-blue-50 group">
+                    <span class="text-base sm:text-lg">Home</span>
+                </a>
+                <a href="#" class="flex items-center space-x-3 sm:space-x-4 text-gray-800 hover:text-purple-600 font-medium transition duration-300 py-3 sm:py-4 px-3 sm:px-4 rounded-xl hover:bg-gradient-to-r hover:from-purple-50 hover:to-blue-50 group">
+                    <span class="text-base sm:text-lg">Play Games</span>
+                </a>
+                <a href="#" class="flex items-center space-x-3 sm:space-x-4 text-gray-800 hover:text-purple-600 font-medium transition duration-300 py-3 sm:py-4 px-3 sm:px-4 rounded-xl hover:bg-gradient-to-r hover:from-purple-50 hover:to-blue-50 group">
+                    <span class="text-xl sm:text-2xl group-hover:scale-110 transition-transform">🏆</span>
+                    <span class="text-base sm:text-lg">Results</span>
+                </a>                 
+            </nav>
+            
+            <div class="mt-6 sm:mt-8 space-y-3">
+                <button class="w-full bg-purple-600 text-white py-3 px-4 rounded-lg font-medium hover:bg-purple-700 transition duration-300 text-sm sm:text-base">Sign Up</button>
+                <button class="w-full border-2 border-purple-600 text-purple-600 py-3 px-4 rounded-lg font-medium hover:bg-purple-50 transition duration-300 text-sm sm:text-base">Login</button>
+            </div>
+        </div>
+        
+        <div class="absolute bottom-0 left-0 right-0 p-4 sm:p-6 border-t border-gray-200">
+            <div class="text-center text-gray-500 text-xs sm:text-sm">
+                <p>info@randlotterylimited.com</p>
+                <p>+233 XX XXX XXXX</p>
+            </div>
+        </div>
+    </aside>
 
     <div class="hero-section">
         <video class="hero-video" autoplay loop muted>
@@ -361,28 +563,6 @@
             Your browser does not support the video tag.
         </video>
         <div class="video-overlay"></div>
-        <nav class="navbar navbar-expand navbar-dark bg-transparent">
-            <div class="container-fluid">
-                <a class="navbar-brand" href="#">Lotto</a>
-                <div class="collapse navbar-collapse" id="navbarNav">
-                    <ul class="navbar-nav ms-auto">
-                        <li class="nav-item">
-                            <a class="nav-link active" aria-current="page" href="#">Home</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="#">How to Play</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="#">Prizes</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="#">Contact</a>
-                        </li>
-                    </ul>
-                </div>
-            </div>
-        </nav>
-
         <div class="hero-content">
             <h1 class="hero-title">Your Fortune Awaits</h1>
             <p class="hero-subtitle">Select your lucky numbers and take a chance at winning big! Every number could be the one.</p>
@@ -390,120 +570,301 @@
     </div>
 
     <div class="lotto-wrapper">
-        <div class="container mx-auto bg-white px-4 position-relative shadow custom-p-10 custom-my-10">
+        <div class="lotto-content-container">
             <div class="text-center custom-mb-12 custom-mb-sm-16 custom-mb-lg-20">
                 <h2 class="heading-responsive-text fw-bolder mb-4 custom-mb-sm-6" style="color: rgb(12, 10, 96);">
                     Play & Win Today
                 </h2>
                 <p class="paragraph-responsive-text text-custom-gray-600 max-w-2xl mx-auto px-4">Choose your lucky numbers and join thousands of winners. Your fortune is just one click away!</p>
             </div>
-
-            <div class="border custom-border-2 custom-mb-12 shadow">
-                <div class="custom-gradient-border-inner custom-p-10">
-                    <div class="d-flex align-items-center mb-4">
-                        <div class="custom-w-h-14 custom-bg-gradient-yellow-orange custom-rounded-2xl d-flex align-items-center justify-content-center text-white fw-bold fs-4 me-4 shadow-lg">3</div>
-                        <div class="d-none d-sm-block">
-                            <h3 class="custom-h3 fw-bold text-dark mb-1">Set Your Stake & Payment</h3>
-                            <p class="text-secondary">Choose your bet amount and payment method</p>
-                        </div>
-                    </div>
-                    
-                    <div class="row g-4 g-sm-5 g-lg-6">
-                        <div class="col-lg-6">
-                            <div class="bg-light rounded-3 p-2 p-sm-4 custom-border-2">
-                                <h4 class="fs-5 fs-sm-4 fw-bold text-dark mb-4 mb-sm-6 d-flex align-items-center">
-                                    <span class="fs-4 fs-sm-3 me-2 me-sm-3">
-                                        <img src="resources/Img/cedi.png" alt="Momo Number" class="custom-w-h-14">
-                                    </span>
-                                    Your Stake Amount
-                                </h4>
-                                <div class="position-relative">
-                                    <input type="number" id="takeAmount" name="takeAmount" min="1" max="200" placeholder="Enter amount" class="form-control w-100 px-4 px-sm-6 py-3 py-sm-4 custom-border-2 rounded-3 text-lg text-sm-2xl fw-bold text-center bg-white shadow-lg">
-                                </div>
-                                <div class="d-flex justify-content-between mt-3 mt-sm-4 small text-secondary">
-                                    <span>Minimum: ₵1</span>
-                                    <span>Maximum: ₵200</span>
-                                </div>
-                                <div class="row g-2 mt-4 mt-sm-6">
-                                    <div class="col-6 col-sm-3">
-                                        <button type="button" class="btn btn-light w-100 custom-hover-bg-yellow-200 custom-text-yellow-800 fw-semibold py-2 px-3 custom-rounded-lg transition" data-amount="5">₵5</button>
-                                    </div>
-                                    <div class="col-6 col-sm-3">
-                                        <button type="button" class="btn btn-light w-100 custom-hover-bg-yellow-200 custom-text-yellow-800 fw-semibold py-2 px-3 custom-rounded-lg transition" data-amount="10">₵10</button>
-                                    </div>
-                                    <div class="col-6 col-sm-3">
-                                        <button type="button" class="btn btn-light w-100 custom-hover-bg-yellow-200 custom-text-yellow-800 fw-semibold py-2 px-3 custom-rounded-lg transition" data-amount="20">₵20</button>
-                                    </div>
-                                    <div class="col-6 col-sm-3">
-                                        <button type="button" class="btn btn-light w-100 custom-hover-bg-yellow-200 custom-text-yellow-800 fw-semibold py-2 px-3 custom-rounded-lg transition" data-amount="50">₵50</button>
-                                    </div>
-                                </div>
+            
+            <form id="lottoGameForm" onsubmit="event.preventDefault(); return false;">
+                <div class="border custom-border-2 custom-mb-12 shadow">
+                    <div class="elegant-border-inner custom-p-10">
+                        <div class="d-flex align-items-center mb-4 flex-wrap">
+                            <div class="custom-w-h-14 bg-info bg-gradient rounded-4 d-flex align-items-center justify-content-center text-white fw-bold fs-4 me-4 shadow-lg">1</div>
+                            <div class="d-none d-sm-block me-auto">
+                                <h3 class="custom-h3 fw-bold text-slate-800 mb-1 serif-font">Choose Your Game Day</h3>
+                                <p class="text-slate-600">Select when you want to play and win</p>
                             </div>
+                            <button id="toggleCalculator" type="button" class="btn calculate-btn text-white px-4 py-2 rounded-3 fw-semibold shadow-lg d-flex align-items-center ms-auto">
+                                <span class="fs-4 me-2">💰</span>
+                                <span class="d-none d-sm-inline">Calculate Winnings</span>
+                                <span class="d-sm-none">Calculator</span>
+                            </button>
                         </div>
-
-                        <div class="col-lg-6">
-                            <div class="bg-light rounded-3 p-2 p-sm-4 border border-info">
-                                <h4 class="fs-5 fs-sm-4 fw-bold text-dark mb-4 mb-sm-6 d-flex align-items-center">
-                                    Mobile Money Payment
-                                </h4>
-                                
-                                <div class="row g-2 g-sm-3 mb-4 mb-sm-6">
-                                    <div class="col-4">
-                                        <label class="network-option d-flex flex-column align-items-center text-center cursor-pointer bg-white rounded-3 p-3 p-sm-4 hover-bg-yellow-50 transition border custom-border-2 border-transparent">
-                                            <input type="radio" name="network" value="mtn" class="d-none">
-                                            <div class="custom-w-h-14 bg-warning rounded-3 d-flex align-items-center justify-content-center">
-                                                <img src="resources/Img/mtn.png" alt="MTN MOMO" class="w-100 h-100 rounded-3">
-                                            </div>
-                                        </label>
-                                    </div>
-                                    <div class="col-4">
-                                        <label class="network-option d-flex flex-column align-items-center text-center cursor-pointer bg-white rounded-3 p-3 p-sm-4 hover-bg-red-50 transition border custom-border-2 border-transparent">
-                                            <input type="radio" name="network" value="telecel" class="d-none">
-                                            <div class="custom-w-h-14 bg-danger rounded-3 d-flex align-items-center justify-content-center">
-                                                <img src="resources/Img/voda.png" alt="Telecel" class="w-100 h-100 rounded-3">
-                                            </div>
-                                        </label>
-                                    </div>
-                                    <div class="col-4">
-                                        <label class="network-option d-flex flex-column align-items-center text-center cursor-pointer bg-white rounded-3 p-3 p-sm-4 hover-bg-blue-50 transition border custom-border-2 border-transparent">
-                                            <input type="radio" name="network" value="tigo" class="d-none">
-                                            <div class="custom-w-h-14 bg-primary rounded-3 d-flex align-items-center justify-content-center">
-                                                <img src="resources/Img/airtel.png" alt="Airtel Tigo" class="w-100 h-100 rounded-3">
-                                            </div>
-                                        </label>
-                                    </div>
-                                </div>
-                                
-                                <input type="tel" id="momoNumber" name="momoNumber" placeholder="0XX XXX XXXX" class="form-control w-100 px-4 px-sm-6 py-3 py-sm-4 custom-border-2 border-info rounded-3 text-lg text-sm-xl fw-semibold text-center bg-white shadow-lg">
+                        <div class="row g-2 g-sm-3 g-lg-4 justify-content-center">
+                             <div class="col-4 col-sm-3 col-lg-auto">
+                                <button title="Monday Game" type="button" class="game-btn shadow-lg" data-game="monday">
+                                    <img src="resources/Img/Mondaygame.jpeg" alt="Monday Game" class="game-btn-img">
+                                </button>
+                            </div>
+                            <div class="col-4 col-sm-3 col-lg-auto">
+                                <button title="Tuesday Game" type="button" class="game-btn shadow-lg" data-game="tuesday">
+                                    <img src="resources/Img/tuesday.webp" alt="Tuesday Game" class="game-btn-img">
+                                </button>
+                            </div>
+                            <div class="col-4 col-sm-3 col-lg-auto">
+                                <button title="Wednesday Game" type="button" class="game-btn shadow-lg" data-game="wednesday">
+                                    <img src="resources/Img/wednesdyGame.png" alt="Wednesday Game" class="game-btn-img">
+                                </button>
+                            </div>
+                            <div class="col-4 col-sm-3 col-lg-auto">
+                                <button title="Thursday Game" type="button" class="game-btn shadow-lg" data-game="thursday">
+                                    <img src="resources/Img/thursdayGame.png" alt="Thursday Game" class="game-btn-img">
+                                </button>
+                            </div>
+                            <div class="col-4 col-sm-3 col-lg-auto">
+                                <button title="Friday Game" type="button" class="game-btn shadow-lg" data-game="friday">
+                                    <img src="resources/Img/fridayGame.jpeg" alt="Friday Game" class="game-btn-img">
+                                </button>
+                            </div>
+                            <div class="col-4 col-sm-3 col-lg-auto">
+                                <button title="Saturday Game" type="button" class="game-btn shadow-lg" data-game="saturday">
+                                    <img src="resources/Img/saturday.jpeg" alt="Saturday Game" class="game-btn-img">
+                                </button>
+                            </div>
+                            <div class="col-4 col-sm-3 col-lg-auto">
+                                <button title="Sunday Game" type="button" class="game-btn shadow-lg" data-game="sunday">
+                                    <img src="resources/Img/sundayGame.jpeg" alt="Sunday Game" class="game-btn-img">
+                                </button>
                             </div>
                         </div>
                     </div>
                 </div>
-            </div>
 
-            <div class="lotto-container"> 
-                <h2 class="text-center mb-4">Pick Your Lucky Numbers! 🍀</h2>
-                <p class="text-center text-muted mb-4">Select up to 6 numbers from 1 to 90.</p>
-
-                <div class="selected-numbers-container">
-                    <div id="selectedNumbersOutput" class="selected-numbers-display">
-                        <span class="no-selection-text">No numbers selected yet.</span>
+                <div class="border custom-border-2 custom-mb-12 shadow">
+                    <div class="custom-gradient-border-inner custom-p-10">
+                        <div class="d-flex align-items-center mb-4">
+                            <div class="custom-w-h-14 bg-slate-800 custom-rounded-2xl d-flex align-items-center justify-content-center text-white fw-bold fs-4 me-4 shadow-lg">2</div>
+                            <div class="d-none d-sm-block">
+                                <h3 class="custom-h3 fw-bold text-slate-800 mb-1 serif-font">Select Bet Type</h3>
+                                <p class="text-slate-600">Choose your preferred betting strategy</p>
+                            </div>
+                        </div>
+                        
+                        <div class="row g-2 g-sm-3 g-lg-4">
+                            <div class="col-4 col-sm-3 col-lg-2">
+                                <button type="button" class="btn btn-light w-100 border custom-border-2 border-slate-200 text-slate-800 py-3 rounded-3 fw-semibold small bet-type-btn d-flex flex-column align-items-center justify-content-center" data-bet="direct1">
+                                    <div class="w-25 h-25 bg-slate-800 rounded-circle d-flex align-items-center justify-content-center text-white fw-bold small mb-1">1</div>
+                                    <span class="text-center">Direct 1</span>
+                                </button>
+                            </div>
+                            <div class="col-4 col-sm-3 col-lg-2">
+                                <button type="button" class="btn btn-light w-100 border custom-border-2 border-slate-200 text-slate-800 py-3 rounded-3 fw-semibold small bet-type-btn d-flex flex-column align-items-center justify-content-center" data-bet="direct2">
+                                    <div class="w-25 h-25 bg-slate-800 rounded-circle d-flex align-items-center justify-content-center text-white fw-bold small mb-1">2</div>
+                                    <span class="text-center">Direct 2</span>
+                                </button>
+                            </div>
+                            <div class="col-4 col-sm-3 col-lg-2">
+                                <button type="button" class="btn btn-light w-100 border custom-border-2 border-slate-200 text-slate-800 py-3 rounded-3 fw-semibold small bet-type-btn d-flex flex-column align-items-center justify-content-center" data-bet="direct3">
+                                    <div class="w-25 h-25 bg-slate-800 rounded-circle d-flex align-items-center justify-content-center text-white fw-bold small mb-1">3</div>
+                                    <span class="text-center">Direct 3</span>
+                                </button>
+                            </div>
+                            <div class="col-4 col-sm-3 col-lg-2">
+                                <button type="button" class="btn btn-light w-100 border custom-border-2 border-slate-200 text-slate-800 py-3 rounded-3 fw-semibold small bet-type-btn d-flex flex-column align-items-center justify-content-center" data-bet="perm2">
+                                    <div class="w-25 h-25 bg-slate-800 rounded-circle d-flex align-items-center justify-content-center text-white fw-bold small mb-1">P2</div>
+                                    <span class="text-center">Perm 2</span>
+                                </button>
+                            </div>
+                            <div class="col-4 col-sm-3 col-lg-2">
+                                <button type="button" class="btn btn-light w-100 border custom-border-2 border-slate-200 text-slate-800 py-3 rounded-3 fw-semibold small bet-type-btn d-flex flex-column align-items-center justify-content-center" data-bet="perm3">
+                                    <div class="w-25 h-25 bg-slate-800 rounded-circle d-flex align-items-center justify-content-center text-white fw-bold small mb-1">P3</div>
+                                    <span class="text-center">Perm 3</span>
+                                </button>
+                            </div>
+                            <div class="col-4 col-sm-3 col-lg-2">
+                                <button type="button" class="btn btn-light w-100 border custom-border-2 border-slate-200 text-slate-800 py-3 rounded-3 fw-semibold small bet-type-btn d-flex flex-column align-items-center justify-content-center" data-bet="banker_all">
+                                    <svg class="bi text-slate-800" width="1.5em" height="1.5em" fill="currentColor" viewBox="0 0 16 16">
+                                        <path d="M12.736 3.97a.733.733 0 0 1 1.047 0c.286.289.29.756.01 1.05L7.88 12.01a.733.733 0 0 1-1.065.02L3.217 8.384a.757.757 0 0 1 0-1.06.733.733 0 0 1 1.047 0l3.052 3.098 5.498-5.56zm4.646-4.646a.5.5 0 0 0-.708 0L8 7.293 4.854 4.146a.5.5 0 1 0-.708.708L7.293 8l-3.147 3.146a.5.5 0 0 0 .708.708L8 8.707l3.146 3.147a.5.5 0 0 0 .708-.708L8.707 8l3.147-3.146a.5.5 0 0 0 0-.708z"/>
+                                    </svg>
+                                    <span class="text-center mt-1">Banker All</span>
+                                </button>
+                            </div>
+                            <div class="col-4 col-sm-3 col-lg-2">
+                                <button type="button" class="btn btn-light w-100 border custom-border-2 border-slate-200 text-slate-800 py-3 rounded-3 fw-semibold small bet-type-btn d-flex flex-column align-items-center justify-content-center" data-bet="banker_against">
+                                    <svg class="bi text-slate-800" width="1.5em" height="1.5em" fill="currentColor" viewBox="0 0 16 16">
+                                        <path d="M14.646 4.646a.5.5 0 0 1 .708 0l1 1a.5.5 0 0 1 0 .708l-7 7a.5.5 0 0 1-.708 0l-3-3a.5.5 0 1 1 .708-.708L8 12.293l6.354-6.353zM10 2a1 1 0 0 1 1 1v2a1 1 0 0 1-2 0V3a1 1 0 0 1 1-1z"/>
+                                    </svg>
+                                    <span class="text-center mt-1">Banker Against</span>
+                                </button>
+                            </div>
+                        </div>
                     </div>
                 </div>
 
-                <div id="numberGrid" class="number-grid">
+                <div class="border custom-border-2 custom-mb-12 shadow">
+                    <div class="custom-gradient-border-inner custom-p-10">
+                        <div class="d-flex align-items-center mb-4">
+                            <div class="custom-w-h-14 custom-bg-gradient-yellow-orange custom-rounded-2xl d-flex align-items-center justify-content-center text-white fw-bold fs-4 me-4 shadow-lg">3</div>
+                            <div class="d-none d-sm-block">
+                                <h3 class="custom-h3 fw-bold text-dark mb-1 serif-font">Set Your Stake & Payment</h3>
+                                <p class="text-secondary">Choose your bet amount and payment method</p>
+                            </div>
+                        </div>
+                        
+                        <div class="row g-4 g-sm-5 g-lg-6">
+                            <div class="col-lg-6">
+                                <div class="bg-light rounded-3 p-2 p-sm-4 custom-border-2">
+                                    <h4 class="fs-5 fs-sm-4 fw-bold text-dark mb-4 mb-sm-6 d-flex align-items-center">
+                                        <span class="fs-4 fs-sm-3 me-2 me-sm-3">
+                                            <img src="resources/Img/cedi.png" alt="Momo Number" class="custom-w-h-14">
+                                        </span>
+                                        Your Stake Amount
+                                    </h4>
+                                    <div class="position-relative">
+                                        <input type="number" id="takeAmount" name="takeAmount" min="1" max="200" placeholder="Enter amount" class="form-control w-100 px-4 px-sm-6 py-3 py-sm-4 custom-border-2 rounded-3 text-lg text-sm-2xl fw-bold text-center bg-white shadow-lg">
+                                    </div>
+                                    <div class="d-flex justify-content-between mt-3 mt-sm-4 small text-secondary">
+                                        <span>Minimum: ₵1</span>
+                                        <span>Maximum: ₵200</span>
+                                    </div>
+                                    <div class="row g-2 mt-4 mt-sm-6">
+                                        <div class="col-6 col-sm-3">
+                                            <button type="button" class="btn btn-light w-100 custom-hover-bg-yellow-200 custom-text-yellow-800 fw-semibold py-2 px-3 rounded-3 transition" data-amount="5">₵5</button>
+                                        </div>
+                                        <div class="col-6 col-sm-3">
+                                            <button type="button" class="btn btn-light w-100 custom-hover-bg-yellow-200 custom-text-yellow-800 fw-semibold py-2 px-3 rounded-3 transition" data-amount="10">₵10</button>
+                                        </div>
+                                        <div class="col-6 col-sm-3">
+                                            <button type="button" class="btn btn-light w-100 custom-hover-bg-yellow-200 custom-text-yellow-800 fw-semibold py-2 px-3 rounded-3 transition" data-amount="20">₵20</button>
+                                        </div>
+                                        <div class="col-6 col-sm-3">
+                                            <button type="button" class="btn btn-light w-100 custom-hover-bg-yellow-200 custom-text-yellow-800 fw-semibold py-2 px-3 rounded-3 transition" data-amount="50">₵50</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-lg-6">
+                                <div class="bg-light rounded-3 p-2 p-sm-4 border border-info">
+                                    <h4 class="fs-5 fs-sm-4 fw-bold text-dark mb-4 mb-sm-6 d-flex align-items-center">
+                                        Mobile Money Payment
+                                    </h4>
+                                    
+                                    <div class="row g-2 g-sm-3 mb-4 mb-sm-6">
+                                        <div class="col-4">
+                                            <label class="network-option d-flex flex-column align-items-center text-center cursor-pointer bg-white rounded-3 p-3 p-sm-4 hover-bg-yellow-50 transition border custom-border-2 border-transparent">
+                                                <input type="radio" name="network" value="mtn" class="d-none">
+                                                <div class="custom-w-h-14 bg-warning rounded-3 d-flex align-items-center justify-content-center">
+                                                    <img src="resources/Img/mtn.png" alt="MTN MOMO" class="w-100 h-100 rounded-3">
+                                                </div>
+                                            </label>
+                                        </div>
+                                        <div class="col-4">
+                                            <label class="network-option d-flex flex-column align-items-center text-center cursor-pointer bg-white rounded-3 p-3 p-sm-4 hover-bg-red-50 transition border custom-border-2 border-transparent">
+                                                <input type="radio" name="network" value="telecel" class="d-none">
+                                                <div class="custom-w-h-14 bg-danger rounded-3 d-flex align-items-center justify-content-center">
+                                                    <img src="resources/Img/voda.png" alt="Telecel" class="w-100 h-100 rounded-3">
+                                                </div>
+                                            </label>
+                                        </div>
+                                        <div class="col-4">
+                                            <label class="network-option d-flex flex-column align-items-center text-center cursor-pointer bg-white rounded-3 p-3 p-sm-4 hover-bg-blue-50 transition border custom-border-2 border-transparent">
+                                                <input type="radio" name="network" value="tigo" class="d-none">
+                                                <div class="custom-w-h-14 bg-primary rounded-3 d-flex align-items-center justify-content-center">
+                                                    <img src="resources/Img/airtel.png" alt="Airtel Tigo" class="w-100 h-100 rounded-3">
+                                                </div>
+                                            </label>
+                                        </div>
+                                    </div>
+                                    
+                                    <input type="tel" id="momoNumber" name="momoNumber" placeholder="0XX XXX XXXX" class="form-control w-100 px-4 px-sm-6 py-3 py-sm-4 custom-border-2 border-info rounded-3 text-lg text-sm-xl fw-semibold text-center bg-white shadow-lg">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="lotto-container"> 
+                    <h2 class="text-center mb-4">Pick Your Lucky Numbers! 🍀</h2>
+                    <p class="text-center text-muted mb-4">Select up to 6 numbers from 1 to 90.</p>
+
+                    <div class="selected-numbers-container">
+                        <div id="selectedNumbersOutput" class="selected-numbers-display">
+                            <span class="no-selection-text">No numbers selected yet.</span>
+                        </div>
                     </div>
 
-                <div class="action-buttons">
-                    <button id="clearSelection" class="btn btn-secondary me-2">Clear Selection</button>
-                    <button id="playNow" class="btn btn-primary">Play Now!</button>
+                    <div id="numberGrid" class="number-grid">
+                        </div>
+
+                    <div class="action-buttons">
+                        <button id="clearSelection" type="button" class="btn btn-secondary me-2">Clear Selection</button>
+                        <button id="playNow" type="submit" class="btn btn-primary">Play Now!</button>
+                    </div>
                 </div>
-            </div>
+
+            </form>
 
         </div>
         
     </div>
 
+    <div id="overlay" class="fixed inset-0 bg-black bg-opacity-50 z-40 opacity-0 pointer-events-none transition-opacity duration-300"></div>
+
+    <div id="winningsCalculator" class="fixed top-4 right-4 w-80 bg-white rounded-2xl shadow-2xl border border-gray-200 p-6 transform translate-x-full hidden transition-transform duration-300 ease-in-out z-50">
+        <div class="flex items-center justify-between mb-4">
+            <h3 class="text-lg font-bold text-gray-800 flex items-center">
+                <span class="text-2xl mr-2">💰</span>
+                Potential Winnings
+            </h3>
+            <button id="closeCalculator" class="text-gray-400 hover:text-gray-600 transition duration-200">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                </svg>
+            </button>
+        </div>
+        
+        <div class="space-y-4">
+            <div class="bg-gradient-to-r from-blue-50 to-indigo-50 rounded-lg p-3">
+                <label class="text-sm text-gray-600 mb-2 block">Game Day</label>
+                <select id="calcGameSelect" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-sm font-medium">
+                    <option value="">Select game day</option>
+                    <option value="monday">Monday Fire Draw</option>
+                    <option value="tuesday">Tuesday Power Play</option>
+                    <option value="wednesday">Wednesday Diamond Draw</option>
+                    <option value="thursday">Thursday Star Luck</option>
+                    <option value="friday">Friday Bullseye</option>
+                    <option value="saturday">Saturday Mega Win</option>
+                    <option value="sunday">Sunday Lucky Seven</option>
+                </select>
+            </div>
+            
+            <div class="bg-gradient-to-r from-purple-50 to-pink-50 rounded-lg p-3">
+                <label class="text-sm text-gray-600 mb-2 block">Bet Type</label>
+                <select id="calcBetSelect" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-purple-500 text-sm font-medium">
+                    <option value="">Select bet type</option>
+                    <option value="direct1">Direct 1 </option>
+                    <option value="direct2">Direct 2 (2 Sure)</option>
+                    <option value="direct3">Direct 3 </option>
+                    <option value="perm2">Perm 2 </option>
+                    <option value="perm3">Perm 3</option>
+                    <option value="banker">Banker (Best odds)</option>
+                </select>
+            </div>
+            
+            <div class="bg-gradient-to-r from-yellow-50 to-orange-50 rounded-lg p-3">
+                <label class="text-sm text-gray-600 mb-2 block">Your Stake</label>
+                <div class="relative">
+                    <input type="number" id="calcStakeInput" min="1" max="200" placeholder="Enter amount" class="w-full px-3 py-2 pl-8 border border-gray-300 rounded-lg focus:ring-2 focus:ring-yellow-500 focus:border-yellow-500 text-sm font-medium">
+                    <div class="absolute left-3 top-1/2 transform -translate-y-1/2 text-sm font-bold text-yellow-600">₵</div>
+                </div>
+            </div>
+            
+            <div class="bg-gradient-to-r from-green-50 to-emerald-50 rounded-lg p-4 border-2 border-green-200">
+                <div class="text-sm text-gray-600 mb-1">Potential Win</div>
+                <div id="calcPotentialWin" class="text-2xl font-bold text-green-600">₵0</div>
+                <div id="calcMultiplier" class="text-xs text-gray-500 mt-1">Multiplier: 0x</div>
+            </div>
+        </div>
+        
+        <div class="mt-4 text-xs text-gray-500 text-center">
+            💡 Calculations are estimates based on current odds
+        </div>
+    </div>
+    
     <div id="customModal" class="custom-modal">
         <div class="custom-modal-content">
             <div class="custom-modal-header">
@@ -518,12 +879,99 @@
         </div>
     </div>
 
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+
+
+
+     
+
+    <!-- Footer -->
+    <footer class="bg-gradient-to-br from-gray-900 via-slate-900 to-black text-white py-12 sm:py-16 relative overflow-hidden">
+
+         <div id="whatswidget-pre-wrapper" >
+      <div id="whatswidget-widget-wrapper" class="whatswidget-widget-wrapper" style="all:revert;">
+      <div id="whatswidget-conversation" class="whatswidget-conversation" style="color: revert; font: revert; font-feature-settings: revert; font-kerning: revert; font-optical-sizing: revert; font-variation-settings: revert; text-orientation: revert; text-rendering: revert; -webkit-font-smoothing: revert; -webkit-locale: revert; -webkit-text-orientation: revert; -webkit-writing-mode: revert; writing-mode: revert; zoom: revert; place-content: revert; place-items: revert; place-self: revert; alignment-baseline: revert; animation: revert; appearance: revert; backdrop-filter: revert; backface-visibility: revert; background: revert; background-blend-mode: revert; baseline-shift: revert; block-size: revert; border-block: revert; border: revert; border-radius: revert; border-collapse: revert; border-inline: revert; inset: revert; box-shadow: revert; box-sizing: revert; break-after: revert; break-before: revert; break-inside: revert; buffered-rendering: revert; caption-side: revert; caret-color: revert; clear: revert; clip: revert; clip-path: revert; clip-rule: revert; color-interpolation: revert; color-interpolation-filters: revert; color-rendering: revert; color-scheme: revert; columns: revert; column-fill: revert; gap: revert; column-rule: revert; column-span: revert; contain: revert; contain-intrinsic-size: revert; content: revert; content-visibility: revert; counter-increment: revert; counter-reset: revert; counter-set: revert; cursor: revert; cx: revert; cy: revert; d: revert; display: none; dominant-baseline: revert; empty-cells: revert; fill: revert; fill-opacity: revert; fill-rule: revert; filter: revert; flex: revert; flex-flow: revert; float: revert; flood-color: revert; flood-opacity: revert; grid: revert; grid-area: revert; height: revert; hyphens: revert; image-orientation: revert; image-rendering: revert; inline-size: revert; inset-block: revert; inset-inline: revert; isolation: revert; letter-spacing: revert; lighting-color: revert; line-break: revert; list-style: revert; margin-block: revert; margin: revert; margin-inline: revert; marker: revert; mask: revert; mask-type: revert; max-block-size: revert; max-height: revert; max-inline-size: revert; max-width: revert; min-block-size: revert; min-height: revert; min-inline-size: revert; min-width: revert; mix-blend-mode: revert; object-fit: revert; object-position: revert; offset: revert; opacity: 0; order: revert; origin-trial-test-property: revert; orphans: revert; outline: revert; outline-offset: revert; overflow-anchor: revert; overflow-wrap: revert; overflow: revert; overscroll-behavior-block: revert; overscroll-behavior-inline: revert; overscroll-behavior: revert; padding-block: revert; padding: revert; padding-inline: revert; page: revert; page-orientation: revert; paint-order: revert; perspective: revert; perspective-origin: revert; pointer-events: revert; position: revert; quotes: revert; r: revert; resize: revert; ruby-position: revert; rx: revert; ry: revert; scroll-behavior: revert; scroll-margin-block: revert; scroll-margin: revert; scroll-margin-inline: revert; scroll-padding-block: revert; scroll-padding: revert; scroll-padding-inline: revert; scroll-snap-align: revert; scroll-snap-stop: revert; scroll-snap-type: revert; shape-image-threshold: revert; shape-margin: revert; shape-outside: revert; shape-rendering: revert; size: revert; speak: revert; stop-color: revert; stop-opacity: revert; stroke: revert; stroke-dasharray: revert; stroke-dashoffset: revert; stroke-linecap: revert; stroke-linejoin: revert; stroke-miterlimit: revert; stroke-opacity: revert; stroke-width: revert; tab-size: revert; table-layout: revert; text-align: revert; text-align-last: revert; text-anchor: revert; text-combine-upright: revert; text-decoration: revert; text-decoration-skip-ink: revert; text-indent: revert; text-overflow: revert; text-shadow: revert; text-size-adjust: revert; text-transform: revert; text-underline-offset: revert; text-underline-position: revert; touch-action: revert; transform: revert; transform-box: revert; transform-origin: revert; transform-style: revert; transition: revert; user-select: revert; vector-effect: revert; vertical-align: revert; visibility: revert; -webkit-app-region: revert; border-spacing: revert; -webkit-border-image: revert; -webkit-box-align: revert; -webkit-box-decoration-break: revert; -webkit-box-direction: revert; -webkit-box-flex: revert; -webkit-box-ordinal-group: revert; -webkit-box-orient: revert; -webkit-box-pack: revert; -webkit-box-reflect: revert; -webkit-highlight: revert; -webkit-hyphenate-character: revert; -webkit-line-break: revert; -webkit-line-clamp: revert; -webkit-mask-box-image: revert; -webkit-mask: revert; -webkit-mask-composite: revert; -webkit-perspective-origin-x: revert; -webkit-perspective-origin-y: revert; -webkit-print-color-adjust: revert; -webkit-rtl-ordering: revert; -webkit-ruby-position: revert; -webkit-tap-highlight-color: revert; -webkit-text-combine: revert; -webkit-text-decorations-in-effect: revert; -webkit-text-emphasis: revert; -webkit-text-emphasis-position: revert; -webkit-text-fill-color: revert; -webkit-text-security: revert; -webkit-text-stroke: revert; -webkit-transform-origin-x: revert; -webkit-transform-origin-y: revert; -webkit-transform-origin-z: revert; -webkit-user-drag: revert; -webkit-user-modify: revert; white-space: revert; widows: revert; width: revert; will-change: revert; word-break: revert; word-spacing: revert; x: revert; y: revert; z-index: revert;"><div class="whatswidget-conversation-header" style="all:revert;">
+      <div id="whatswidget-conversation-title" class="whatswidget-conversation-title text-black" style="all:revert;">Rand Team</div></div><div id="whatswidget-conversation-message" class="whatswidget-conversation-message " style="all:revert;">How can we help you?</div><div class="whatswidget-conversation-cta" style="all:revert;"> <a style="all:revert;" id="whatswidget-phone-desktop" target="_blank" href="https://web.whatsapp.com/send?phone=+233 20 196 6123" class="whatswidget-cta whatswidget-cta-desktop">Send message</a> <a id="whatswidget-phone-mobile" target="_blank" href="https://wa.me/+233 20 196 6123" class="whatswidget-cta whatswidget-cta-mobile" style="all:revert;">Send message</a>
+      </div></div>
+      <div id="whatswidget-conversation-message-outer" class="whatswidget-conversation-message-outer" style="all:revert;"> <span id="whatswidget-text-header-outer" class="whatswidget-text-header-outer" style="all:revert;">Rand Team</span><br> <div id="whatswidget-text-message-outer" class="whatswidget-text-message-outer" style="all:revert;">Need Help? Chat With Us.</div></div><div class="whatswidget-button-wrapper" style="all:revert;"><div class="whatswidget-button" id="whatswidget-button" style="all:revert;"><div style="margin:0 auto;width:38.5px;all:revert;"> <img class="whatswidget-icon" style="all:revert;" alt="WhatsappLogo" src=" https://www.oflox.com/blog/wp-content/uploads/2021/01/wpwhite.png"></div></div></div>
+      <script id="whatswidget-script" type="text/javascript">document.getElementById("whatswidget-conversation").style.display="none";document.getElementById("whatswidget-conversation").style.opacity="0"; var button=document.getElementById("whatswidget-button");button.addEventListener("click",openChat);var conversationMessageOuter=document.getElementById("whatswidget-conversation-message-outer");conversationMessageOuter.addEventListener("click",openChat);var chatOpen=!1;function openChat(){0==chatOpen?(document.getElementById("whatswidget-conversation").style.display="block",document.getElementById("whatswidget-conversation").style.opacity=100,chatOpen=!0,document.getElementById("whatswidget-conversation-message-outer").style.display="none"):(document.getElementById("whatswidget-conversation").style.opacity=0,document.getElementById("whatswidget-conversation").style.display="none",chatOpen=!1)}</script></div>
+      <style id="whatswidget-style">.whatswidget-widget-wrapper{font-family:"Helvetica Neue","Apple Color Emoji",Helvetica,Arial,sans-serif !important;font-size:16px !important;position:fixed !important;bottom:20px !important;right:30px !important;z-index:1001 !important}.whatswidget-conversation{background-color:#e4dcd4 !important;background-image:url('https://www.oflox.com/blog/wp-content/uploads/2021/01/wpbg.png') !important;background-repeat:repeat !important;box-shadow:rgba(0, 0, 0, 0.16) 0px 5px 40px !important;width:250px !important;height:300px !important;border-radius:10px !important;transition-duration:0.5s !important;margin-bottom:80px !important}.whatswidget-conversation-header{background-color:#25D366  !important;padding:10px !important;padding-left:25px !important;box-shadow:0px 1px #00000029 !important;font-weight:600 !important;border-top-left-radius:10px !important;border-top-right-radius:10px !important}.whatswidget-conversation-message{line-height: 1.2em !important;background-color:#25D366  !important;padding:10px !important;margin:10px !important;margin-left:15px !important;border-radius:5px !important}.whatswidget-conversation-message-outer{background-color:#25D366  !important;padding:10px !important;margin:10px !important;margin-left:0px !important;border-radius:5px !important;box-shadow:rgba(0, 0, 0, 0.342) 0px 2.5px 10px !important;cursor:pointer !important;animation:nudge 2s linear infinite !important;margin-bottom:70px !important}.whatswidget-text-header-outer{font-weight:bold !important;font-size:90% !important}.whatswidget-text-message-outer{font-size:90% !important}.whatswidget-conversation-cta{border-radius:25px !important;width:175px !important;font-size:110% !important;padding:10px !important;margin:0 auto !important;text-align:center !important;background-color:#23b123 !important;color:white !important;font-weight:bold !important;box-shadow:rgba(0, 0, 0, 0.16) 0px 2.5px 10px !important;transition:1s !important;position:absolute !important;top:62% !important;left:10% !important}.whatswidget-conversation-cta:hover{transform:scale(1.1) !important;filter:brightness(1.3) !important}.whatswidget-cta{text-decoration:none !important;color:white !important}.whatswidget-cta-desktop{display:none !important}.whatswidget-cta-mobile{display:inherit !important}@media (min-width: 48em){.whatswidget-cta-desktop{display:inherit !important}
+      .whatswidget-cta-mobile{display:none !important}}.whatswidget-button-wrapper{position:fixed !important;bottom:15px !important;right:15px !important}.whatswidget-button{position:relative !important;right:0px !important;background-color:#31d831 !important;border-radius:100% !important;width:60px !important;height:60px !important;box-shadow:2px 1px #0d630d63 !important;transition:1s !important}.whatswidget-icon{width:42px !important;height:42px !important;position:absolute !important; bottom:10px !important; left:10px !important;}.whatswidget-button:hover{filter:brightness(115%) !important;transform:rotate(15deg) scale(1.15) !important;cursor:pointer !important}@keyframes nudge{20%,100%{transform:translate(0,0)}0%{transform:translate(0,5px);transform:rotate(2deg)}10%{transform:translate(0,-5px);transform:rotate(-2deg)}}.whatswidget-link{position:absolute !important;bottom:90px !important;right:5px !important;opacity:0.5 !important}</style>
+    </div>
+
+        <!-- Background Effects -->
+        <div class="absolute inset-0 opacity-5">
+            <div class="absolute top-10 left-10 w-32 h-32 sm:w-40 sm:h-40 bg-yellow-400 rounded-full blur-3xl"></div>
+            <div class="absolute bottom-10 right-10 w-24 h-24 sm:w-32 sm:h-32 bg-purple-500 rounded-full blur-3xl"></div>
+        </div>
+        
+        <div class="container mx-auto px-4 sm:px-6 lg:px-8 relative">
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-8 sm:gap-10">
+                <div class="md:col-span-2">                    
+                        <div class="flex items-center space-x-2 sm:space-x-3">
+                            <img src="resources/Img/LogoLarge.png" alt="Rand Lottery Logo" class="w-70 h-40">                            
+                        </div>
+                    <p class="text-base sm:text-lg mb-4 sm:mb-6 text-center text-bold text-yellow-300 glow-text">Seize Your Chance</p>                    
+                </div>
+                <div>
+                    <h3 class="font-bold text-lg sm:text-xl mb-4 sm:mb-6 text-yellow-400">Quick Links</h3>
+                    <ul class="space-y-2 sm:space-y-3">
+                        <li><a href="#" class="text-gray-300 hover:text-yellow-400 transition duration-300 flex items-center text-sm sm:text-base">Home</a></li>
+                        <li><a href="#" class="text-gray-300 hover:text-yellow-400 transition duration-300 flex items-center text-sm sm:text-base">Play Games</a></li>
+                        <li><a href="#" class="text-gray-300 hover:text-yellow-400 transition duration-300 flex items-center text-sm sm:text-base">Results</a></li>
+                        <li><a href="#" class="text-gray-300 hover:text-yellow-400 transition duration-300 flex items-center text-sm sm:text-base">Winnings</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h3 class="font-bold text-lg sm:text-xl mb-4 sm:mb-6 text-yellow-400">Support</h3>
+                    <ul class="space-y-2 sm:space-y-3">
+                        <li><a href="#" class="text-gray-300 hover:text-yellow-400 transition duration-300 flex items-center text-sm sm:text-base">Contact Us</a></li>
+                        <li><a href="#" class="text-gray-300 hover:text-yellow-400 transition duration-300 flex items-center text-sm sm:text-base">How to Play</a></li>
+                        <li><a href="#" class="text-gray-300 hover:text-yellow-400 transition duration-300 flex items-center text-sm sm:text-base">Responsible Gaming</a></li>
+                        <li><a href="#" class="text-gray-300 hover:text-yellow-400 transition duration-300 flex items-center text-sm sm:text-base">Terms & Conditions</a></li>
+                    </ul>
+                </div>
+            </div>
+            
+            <!-- Contact Info -->
+            <div class="mt-8 sm:mt-12 pt-6 sm:pt-8 border-t border-gray-700">
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-4 sm:gap-6 text-center">
+                    <div class="glass-effect rounded-xl sm:rounded-2xl p-4 sm:p-6">
+                        <h4 class="font-bold text-yellow-400 mb-1 text-sm sm:text-base">Location</h4>
+                        <p class="text-gray-300 text-sm sm:text-base">Accra, Ghana</p>
+                    </div>
+                    <div class="glass-effect rounded-xl sm:rounded-2xl p-4 sm:p-6">
+                        <h4 class="font-bold text-yellow-400 mb-1 text-sm sm:text-base">Phone</h4>
+                        <p class="text-gray-300 text-sm sm:text-base">+233 XX XXX XXXX</p>
+                    </div>
+                    <div class="glass-effect rounded-xl sm:rounded-2xl p-4 sm:p-6">
+                        <h4 class="font-bold text-yellow-400 mb-1 text-sm sm:text-base">Email</h4>
+                        <p class="text-gray-300 text-sm sm:text-base">info@randlotterylimited.com</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="border-t border-gray-700 mt-10 sm:mt-15 pt-6 sm:pt-8 text-center inline  ">
+                <p class="text-gray-400 text-sm sm:text-lg">&copy; <span id="currentYear"></span> Rand Lottery. All rights reserved. Play responsibly. 18+. Powered by
+                    <img src="resources/Img/FnFlogo.png" alt="FNF Logo" class="inline w-15 h-10" title="FNF Logo">
+                </p>
+            </div>
+        </div>
+    </footer>
+
+
+    <!-- footer end -->
+
+
+
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
     <script>
         const numberGrid = document.getElementById('numberGrid');
         const selectedNumbersOutput = document.getElementById('selectedNumbersOutput');
         const clearSelectionButton = document.getElementById('clearSelection');
         const playNowButton = document.getElementById('playNow');
+        const gameDayButtons = document.querySelectorAll('.game-btn');
+        const lottoGameForm = document.getElementById('lottoGameForm');
 
         const customModal = document.getElementById('customModal');
         const modalTitle = document.getElementById('modalTitle');
@@ -535,7 +983,7 @@
         // Function to show custom modal
         function showCustomModal(title, message) {
             modalTitle.textContent = title;
-            modalMessage.textContent = message;
+            modalMessage.innerHTML = message;
             customModal.style.display = 'flex'; // Use flex to center
         }
 
@@ -546,6 +994,16 @@
 
         // Event listener for closing the modal
         closeModalBtn.addEventListener('click', hideCustomModal);
+
+        // Game day button selection logic
+        gameDayButtons.forEach(button => {
+            button.addEventListener('click', () => {
+                // Remove 'selected' class from all buttons
+                gameDayButtons.forEach(btn => btn.classList.remove('selected'));
+                // Add 'selected' class to the clicked button
+                button.classList.add('selected');
+            });
+        });
 
         // Generate number buttons (1 to 90)
         for (let i = 1; i <= 90; i++) {
@@ -560,8 +1018,12 @@
 
                 if (index === -1) {
                     // Number not selected, add it
-                    selectedNumbers.push(number);
-                    button.classList.add('selected');
+                    if (selectedNumbers.length < 6) {
+                        selectedNumbers.push(number);
+                        button.classList.add('selected');
+                    } else {
+                        showCustomModal('Selection Limit Reached', 'You can only select up to 6 numbers.');
+                    }
                 } else {
                     // Number already selected, remove it
                     selectedNumbers.splice(index, 1);
@@ -597,21 +1059,215 @@
             updateSelectedNumbersDisplay();
             showCustomModal('Selection Cleared', 'All your selected numbers have been cleared.');
         });
-
-        // Handle Play Now button click
-        playNowButton.addEventListener('click', () => {
-            if (selectedNumbers.length === 0) {
-                showCustomModal('No Numbers Selected', 'Please select at least one number to play.');
-            } else {
-                const sortedNumbers = [...selectedNumbers].sort((a, b) => a - b);
-                showCustomModal('Ready to Play!', `You have selected: ${sortedNumbers.join(', ')}. Good luck!`);
-                // Here you would typically send the selected numbers to a backend
-                console.log('Numbers submitted:', sortedNumbers);
-            }
+        
+        // Bet type button selection logic
+        const betTypeButtons = document.querySelectorAll('.bet-type-btn');
+        betTypeButtons.forEach(button => {
+            button.addEventListener('click', () => {
+                // Remove 'selected' class from all bet type buttons
+                betTypeButtons.forEach(btn => btn.classList.remove('selected'));
+                // Add 'selected' class to the clicked button
+                button.classList.add('selected');
+            });
         });
+
+        // New JavaScript for Stake Amount buttons
+        const stakeAmountInput = document.getElementById('takeAmount');
+        const stakeButtons = document.querySelectorAll('.custom-hover-bg-yellow-200');
+
+        stakeButtons.forEach(button => {
+            button.addEventListener('click', () => {
+                const amount = button.dataset.amount;
+                stakeAmountInput.value = amount;
+            });
+        });
+
+        // New JavaScript for Network selection
+        const networkOptions = document.querySelectorAll('.network-option');
+        networkOptions.forEach(label => {
+            const radioInput = label.querySelector('input[type="radio"]');
+            label.addEventListener('click', (e) => {
+                // Prevent the click from propagating to the radio input
+                e.preventDefault(); 
+                // Programmatically check the radio button
+                radioInput.checked = true;
+                // Update the visual selection
+                networkOptions.forEach(opt => opt.classList.remove('selected'));
+                label.classList.add('selected');
+            });
+        });
+
+
+        // Handle Play Now button click and form submission
+        lottoGameForm.addEventListener('submit', (event) => {
+            event.preventDefault(); // Prevent default form submission
+
+            const selectedGameDay = document.querySelector('.game-btn.selected');
+            const selectedBetType = document.querySelector('.bet-type-btn.selected');
+            const stakeAmount = document.getElementById('takeAmount').value;
+            const momoNumber = document.getElementById('momoNumber').value;
+            const selectedNetwork = document.querySelector('input[name="network"]:checked');
+            
+            if (!selectedGameDay) {
+                showCustomModal('Missing Information', 'Please select a **game day**.');
+                return;
+            }
+            if (!selectedBetType) {
+                showCustomModal('Missing Information', 'Please select a **bet type**.');
+                return;
+            }
+            if (selectedNumbers.length === 0) {
+                showCustomModal('Missing Information', 'Please select at least **one number** to play.');
+                return;
+            }
+            if (!stakeAmount || stakeAmount <= 0) {
+                showCustomModal('Missing Information', 'Please enter a valid **stake amount**.');
+                return;
+            }
+            if (!selectedNetwork) {
+                showCustomModal('Missing Information', 'Please select a **mobile money network**.');
+                return;
+            }
+            if (!momoNumber) {
+                showCustomModal('Missing Information', 'Please enter your **mobile money number**.');
+                return;
+            }
+
+            const formData = {
+                gameDay: selectedGameDay.dataset.game,
+                betType: selectedBetType.dataset.bet,
+                numbers: selectedNumbers.sort((a, b) => a - b),
+                stake: stakeAmount,
+                network: selectedNetwork.value,
+                phoneNumber: momoNumber
+            };
+
+            showCustomModal('Submission Successful!', `You have submitted a ticket for **${formData.gameDay}** with the following details:<br><br>
+            **Bet Type:** ${formData.betType}<br>
+            **Numbers:** ${formData.numbers.join(', ')}<br>
+            **Stake:** ₵${formData.stake}<br>
+            **Network:** ${formData.network.toUpperCase()}<br>
+            **Phone:** ${formData.phoneNumber}`);
+
+            console.log('Form Submitted:', formData);
+            
+            // You can add your AJAX submission logic here
+        });
+        
+        // --- START NEW CALCULATOR SCRIPT ---
+        
+        const calcGameSelect = document.getElementById('calcGameSelect');
+        const calcBetSelect = document.getElementById('calcBetSelect');
+        const calcStakeInput = document.getElementById('calcStakeInput');
+        const calcPotentialWin = document.getElementById('calcPotentialWin');
+        const calcMultiplier = document.getElementById('calcMultiplier');
+
+        // Define odds for each bet type
+        const winningsOdds = {
+            direct1: 2,
+            direct2: 120,
+            direct3: 1200,
+            perm2: 15,
+            perm3: 30,
+            banker: 12,
+        };
+
+        // Function to update the winnings display
+        function updateWinnings() {
+            const betType = calcBetSelect.value;
+            const stake = parseFloat(calcStakeInput.value) || 0;
+            
+            if (betType && stake > 0) {
+                const multiplier = winningsOdds[betType] || 0;
+                const potentialWin = stake * multiplier;
+
+                calcPotentialWin.textContent = `₵${potentialWin.toFixed(2)}`;
+                calcMultiplier.textContent = `Multiplier: ${multiplier}x`;
+            } else {
+                calcPotentialWin.textContent = '₵0';
+                calcMultiplier.textContent = 'Multiplier: 0x';
+            }
+        }
+
+        // Add event listeners to the calculator inputs
+        calcGameSelect.addEventListener('change', updateWinnings);
+        calcBetSelect.addEventListener('change', updateWinnings);
+        calcStakeInput.addEventListener('input', updateWinnings);
+
+        // --- END NEW CALCULATOR SCRIPT ---
 
         // Initial display update
         updateSelectedNumbersDisplay();
+    </script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const burgerMenu = document.getElementById('burgerMenu');
+            const asideNav = document.getElementById('asideNav');
+            const closeNav = document.getElementById('closeNav');
+
+            const winningsCalculator = document.getElementById('winningsCalculator');
+            const overlay = document.getElementById('overlay');
+            const navCalculatorBtn = document.getElementById('navCalculator');
+            const toggleCalculatorBtn = document.getElementById('toggleCalculator');
+            const closeCalculatorBtn = document.getElementById('closeCalculator');
+
+            // Function to open the side navigation
+            function openNav() {
+                asideNav.classList.remove('-translate-x-full');
+                asideNav.classList.add('translate-x-0');
+            }
+
+            // Function to close the side navigation
+            function closeNavPanel() {
+                asideNav.classList.remove('translate-x-0');
+                asideNav.classList.add('-translate-x-full');
+            }
+
+            // Function to show the calculator overlay
+            function showCalculator() {
+                // First, remove the 'hidden' class to make it available for the transition
+                winningsCalculator.classList.remove('hidden');
+                // Then, trigger the transition
+                winningsCalculator.classList.remove('translate-x-full');
+                winningsCalculator.classList.add('translate-x-0');
+                overlay.classList.remove('pointer-events-none', 'opacity-0');
+                overlay.classList.add('pointer-events-auto', 'opacity-100');
+            }
+
+            // Function to hide the calculator overlay
+            function hideCalculator() {
+                winningsCalculator.classList.remove('translate-x-0');
+                winningsCalculator.classList.add('translate-x-full');
+                overlay.classList.remove('pointer-events-auto', 'opacity-100');
+                overlay.classList.add('pointer-events-none', 'opacity-0');
+                // Use a slight delay to add the hidden class after the transition
+                setTimeout(() => {
+                    winningsCalculator.classList.add('hidden');
+                }, 300);
+            }
+
+            // Event listeners for opening and closing the side nav
+            if (burgerMenu) {
+                burgerMenu.addEventListener('click', openNav);
+            }
+            if (closeNav) {
+                closeNav.addEventListener('click', closeNavPanel);
+            }
+
+            // Event listeners for showing and hiding the calculator
+            if (navCalculatorBtn) {
+                navCalculatorBtn.addEventListener('click', showCalculator);
+            }
+            if (toggleCalculatorBtn) {
+                toggleCalculatorBtn.addEventListener('click', showCalculator);
+            }
+            if (closeCalculatorBtn) {
+                closeCalculatorBtn.addEventListener('click', hideCalculator);
+            }
+            if (overlay) {
+                overlay.addEventListener('click', hideCalculator);
+            }
+        });
     </script>
 </body>
 </html>
